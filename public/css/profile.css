@@ -1,0 +1,32 @@
+.profile-picture {
+    position: relative;
+    display: inline-block;
+  }
+
+  .profile-picture img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .profile-picture .edit-icon {
+    position: absolute;
+    bottom: 37px;
+    right: 10px;
+    background-color: rgb(238, 238, 238);;
+    color: black;
+    border: none;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+  .profile-picture .edit-icon:hover {
+    background-color: gray;
+  }
+
+  .file-input {
+    display: none;
+  }

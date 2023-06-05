@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Likes;
 use App\Models\Posts;
 use App\Models\Comments;
 use Illuminate\Http\Request;
@@ -17,13 +18,17 @@ class UserController extends Controller
     }
 
     public function authenticate(Request $request) {
-        $user = ['email' => $request->email, 'password' => $request->password];
+        $user = $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
         if( auth()->attempt($user)) {
             $request->session()->regenerate();
             return redirect('/');
         }
         else {
-            return back()->withErrors(['email' => 'Invalid Credentials']);
+            return back()->withErrors(['email' => 'Invalid Credentials'])->onlyInput('email');
         }
         
     }
@@ -45,7 +50,8 @@ class UserController extends Controller
                 $commentOwner =  User::find($comment->user_id);
                 $comment->commentOwner = $commentOwner;
             }
-
+            $post->isLiked = Likes::where('user_id', auth()->user()->id)
+                ->where('post_id', $post->id)->exists();
         }
 
         return view('users.show', ['user' => $user, 'posts' => $posts]);

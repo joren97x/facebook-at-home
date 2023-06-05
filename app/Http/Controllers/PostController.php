@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Posts;
 use App\Models\Comments;
 use Illuminate\Http\Request;
+use App\Models\Likes;
 
 class PostController extends Controller
 {
@@ -28,9 +29,14 @@ class PostController extends Controller
                 $comment->commentOwner = $commentOwner;
             }
 
+            $post->isLiked = Likes::where('user_id', auth()->user()->id)
+                ->where('post_id', $post->id)->exists();
+
         }
         return view('index', ['posts' => $posts]);
     }
+
+    
 
     public function show($user_id) {
 

@@ -15,4 +15,8 @@ class Posts extends Model
         'user_id'
     ];
 
+    public function likes() {
+        return $this->hasMany(Likes::class);
+    }
+
 }

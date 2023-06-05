@@ -1,13 +1,20 @@
-    <div class="card shadow my-3" style="width: 35rem;">
-        <div class="card-body">
-            <h6 class="card-title"> <i class="bi bi-person-circle h5"></i> <input type="button" style="padding-right: 260px;" data-bs-toggle="modal" data-bs-target="#createPost" class="btn text-start" style="width: 500px" value="What's on your mind, {{ auth()->user()->firstname }}?... "> </h6>
+    <div class="row justify-content-center">
+        <div class="card shadow my-3" style="width: 35rem;">
+            <div class="card-body">
+                @if (auth()->user()->profile_pic)
+                    <h6 class="card-title"> <img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar"> <input type="button" style="padding-right: 220px; background-color: rgb(238, 238, 238);"  data-bs-toggle="modal" data-bs-target="#createPost" class="btn text-start rounded-pill" style="width: 500px" value="What's on your mind, {{ auth()->user()->firstname }}?... "> </h6>
+                @else
+                    <h6 class="card-title"> <img src="{{ asset('images/default.png') }}" alt="no profile" class="post-avatar"> <input type="button" style="padding-right: 220px; background-color: rgb(238, 238, 238);"  data-bs-toggle="modal" data-bs-target="#createPost" class="btn text-start rounded-pill" style="width: 500px" value="What's on your mind, {{ auth()->user()->firstname }}?... "> </h6>
+                @endif
+            </div>
         </div>
     </div>
 
     @foreach ($posts as $post)
+    <div class="row justify-content-center">
         <x-post-card :post="$post" />
+    </div>
     @endforeach
-
         <!-- Create Post Modal -->
     <form method="POST" action="/posts/create">
         @csrf
@@ -19,8 +26,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <h6 class="card-title"> <i class="bi bi-person-circle h5"></i> {{ auth()->user()->firstname . " " . auth()->user()->lastname }} </h6>
-                    <textarea name="post-content" class="border-0 mt-3" cols="60" rows="2" placeholder="Write a post..."></textarea>
+                <h6 class="card-title"> 
+                        <img src="{{ empty(auth()->user()->profile_pic) ? asset('images/default.png') : asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar"> {{ auth()->user()->firstname . " " . auth()->user()->lastname }} </h6>
+                    <textarea name="post-content" class="border-0 mt-3" cols="57" rows="2" placeholder="Write a post..."></textarea>
                     <div class="row">
                         <input type="file" name="post-img" class="form-control">
                     </div>

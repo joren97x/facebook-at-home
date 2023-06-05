@@ -16,7 +16,7 @@
                 @enderror
                 <input type="password" class="form-control my-2" name="password" placeholder="Password">
                 <input type="submit" class="btn btn-primary form-control" value="Login">
-                Dont have an account? <a href="/register" style="text-decoration: none">Register</a>
+                Dont have an account? <a href="/register" style=" color: blue;">Register</a>
             </div>
           </div>
     </div>

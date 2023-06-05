@@ -1,55 +1,109 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Facebook Comment Section</title>
+  <title>Facebook Left Sidebar</title>
   <style>
-    .comment-section {
-      margin-bottom: 20px;
-    }
+    .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #4267B2;
+  color: white;
+}
 
-    .comment {
-      display: flex;
-      margin-bottom: 10px;
-    }
+.navbar-logo {
+  font-weight: bold;
+  font-size: 20px;
+}
 
-    .comment-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
+.navbar-menu {
+  display: flex;
+  align-items: center;
+}
 
-    .comment-content {
-      flex-grow: 1;
-    }
+.navbar-nav {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
 
-    .comment-author {
-      font-weight: bold;
-    }
+.nav-item {
+  margin-right: 10px;
+}
 
-    .comment-text {
-      margin-top: 5px;
-    }
+.nav-link {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.navbar-search {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.search-input {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+.search-button {
+  padding: 5px 10px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.profile-picture {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: white;
+  margin-right: 5px;
+}
+
+.profile-name {
+  font-weight: bold;
+}
+
   </style>
 </head>
 <body>
-  <div class="comment-section">
-    <div class="comment">
-      <img src="avatar1.jpg" alt="Avatar" class="comment-avatar">
-      <div class="comment-content">
-        <div class="comment-author">John Doe</div>
-        <div class="comment-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="navbar-logo">Facebook</span>
+    </div>
+    <div class="navbar-menu">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a href="#" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Friends</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">Messages</a>
+        </li>
+      </ul>
+      <div class="navbar-search">
+        <input type="text" class="search-input" placeholder="Search">
+        <button class="search-button"><i class="bi bi-search"></i></button>
+      </div>
+      <div class="navbar-profile">
+        <div class="profile-picture"></div>
+        <span class="profile-name">John Doe</span>
       </div>
     </div>
-    <div class="comment">
-      <img src="avatar2.jpg" alt="Avatar" class="comment-avatar">
-      <div class="comment-content">
-        <div class="comment-author">Jane Smith</div>
-        <div class="comment-text">Sed eu dolor id quam placerat elementum.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Add more comments with different avatars, authors, and texts -->
+  </nav>
+  
 </body>
 </html>

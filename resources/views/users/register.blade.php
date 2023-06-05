@@ -26,7 +26,7 @@
             @enderror
               <input type="password" class="form-control my-2" name="password_confirmation" placeholder="Confirm Password" required>
               <input type="submit" class="btn btn-primary form-control" value="Register">
-                    Already have an account? <a href="/login" style="text-decoration: none">Login</a>
+                    Already have an account? <a href="/login" style=" color: blue;">Login</a>
             </div>
           </div>
     </div>

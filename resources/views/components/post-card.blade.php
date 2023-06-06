@@ -1,29 +1,5 @@
 @props(['post'])
-<style>
-    .post {
-    display: flex;
-    align-items: center;
-  }
-
-  .post-avatar {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  .border-top .col-6:hover {
-    background-color: rgb(238, 238, 238);
-  }
-  .border-top .col-6 {
-    border-radius: 10px;
-  }
-  .view-all-comments:hover a {
-    text-decoration: underline;
-  }
-  #view-comment:hover {
-    text-decoration: underline;
-  }
-</style>
+<link rel="stylesheet" href="/css/post.css">
 <div class="card my-3 shadow border" style="width: 35rem;">
     <div class="card-body "> 
         {{-- POST OWNER AND DATE AND POST BODY --}}
@@ -34,11 +10,11 @@
                 <a href="/profile/{{ $post->user->id }}"> <img src="{{ asset('images/'.$post->user->profile_pic) }}" alt="Avatar" class="post-avatar"> </a>
             @endif
                 <div class="post-author fw-medium "> 
-                    <a href="/profile/{{ $post->user->id }}"> {{ $post->user->firstname . ' ' . $post->user->lastname }} </a> • 
+                    <a href="/profile/{{ $post->user->id }}" id="post-owner"> {{ $post->user->firstname . ' ' . $post->user->lastname }} </a> • 
                     <span class="fw-light" style="font-size: 14px"> {{ $post->created_at->diffForHumans() }} </span> 
                     <span style="position: absolute; top: 25; right: 30; display: flex; align-items: center;">
-                        <label><i class="bi bi-three-dots me-4"></i></label>
-                        <label><i class="bi bi-x-lg"></i></label>
+                        <label> <button class="btn"> <i class="bi bi-three-dots"></i> </button> </label>
+                        <label> <button class="btn"> <i class="bi bi-x-lg"></i> </button> </label>
                       </span>
                 </div>
           </div>
@@ -57,13 +33,13 @@
                 <span style="font-size: 15px" id="likesContainer{{ $post->id }}"> @if($post->likes > 0) {{ $post->likes == 1 ? $post->likes . " like" : $post->likes . " likes" }}  @endif  </span> 
             </div> 
             <div class="col-6 justify-content-end d-flex fw-light"> 
-                <a href="#" id="view-comment" class="view-all-comments-focus{{ $post->id }}"><span style="font-size: 15px" > @if($post->comments > 0) {{ $post->comments == 1 ? $post->comments . " comment" : $post->comments . " comments" }}  @endif </span> </a>
+                <a href="#" id="view-comment" class="view-all-comments-focus{{ $post->id }}"><span style="font-size: 15px" id="comment_stats"> @if($post->comments > 0) {{ $post->comments == 1 ? $post->comments . " comment" : $post->comments . " comments" }}  @endif </span> </a>
             </div>
         </div>
         
-        {{-- LIKE AND COMMENT BUTTONS --}}
+        {{-- LIKE, COMMENT AND SHARE BUTTONS --}}
     <div class="row text-center border-top border-bottom">
-        <div class="col-6">
+        <div class="col-4">
             @if($post->isLiked)
             <form id="unlikeForm{{ $post->id }}" method="POST" class="mb-0">
                 @csrf 
@@ -80,9 +56,12 @@
             </form>
             @endif
         </div>
-        <div class="col-6">
+        <div class="col-4">
              <button class="btn form-control" id="commentBtn{{ $post->id }}"> <i class="bi bi-chat-square"></i> <span style="font-size: 14px"> Comment</span> </button> 
         </div>
+        <div class="col-4">
+            <button class="btn form-control" id="commentBtn{{ $post->id }}"> <i class="bi bi-share"></i> <span style="font-size: 14px"> Share</span> </button> 
+       </div>
     </div>
     
     {{-- KUNG NI LIKE OR UNLIKE --}}
@@ -187,11 +166,19 @@
                 <img src="{{ asset('images/default.png') }}" alt="Avatar" class="post-avatar">
             @endif
             <div class="post-author fw-medium "> 
-                <textarea name="content" id="commentTextArea{{ $post->id }}" style="background: whitesmoke;" class="border-0 form-control" id="commentTextArea{{ $post->id }}" placeholder="Write a comment..." cols="65" rows="1"></textarea>  
+                <div class="d-flex">
+                    <textarea name="content" id="commentTextArea{{ $post->id }}" style="background: whitesmoke;" class="border-0 form-control" id="commentTextArea{{ $post->id }}" placeholder="Write a comment..." cols="65" rows="1"></textarea>
+                    <label for="fileInput" class="ml-auto">
+                      <button class="btn"> <i class="bi bi-camera-fill"></i> </button>
+                    </label>
+                  </div>
+                  <input type="file" id="fileInput" style="display: none;">
             </div>
         </div>
     </form> 
 </div>
+
+
 
 <script>
 
@@ -200,7 +187,6 @@
 
         var parentDiv = document.getElementById("comment_container{{ $post->id }}");
         var divCount = parentDiv.getElementsByClassName("single-comment").length;
-        console.log(divCount)
 
         $('#commentForm{{ $post->id }}').on('submit', function(e) {
             e.preventDefault();
@@ -214,6 +200,7 @@
                 type: "POST",
                 data: formData,
                 success: function(response) {
+
                     var comment = response.comment
                     var commentOwner = response.comment.commentOwner
 
@@ -236,6 +223,8 @@
                                 updated_at: commentOwner.updated_at
                             }
                     }
+
+                    $('#comment_stats').text(comment.statistic+" comments")
 
                     var comContainer = $('.comment-container')
                     console.log(comContainer)
@@ -295,8 +284,12 @@ if(divCount == 0) {
     $('.show-more-comments{{ $post->id }}').css("display", "");
 }
 else {
-    $('#comment_container{{ $post->id }}').append(commentCard);
 
+    // var parent = document.querySelector('.show-more-comments{{ $post->id }}')
+    // var child = parent.getElementsByClassName("single-comment").length;
+    // console.log(child)
+
+    $('#comment_container{{ $post->id }}').append(commentCard);
 }
 
                 },
@@ -306,7 +299,7 @@ else {
             })
 
         })
-
+        // IF COMMENTS IN COMMENTBOX AND PRESSES ENTER KEY GO TO FUNCTION ABOVE TO SUBMIT FORM
         $('#commentTextArea{{ $post->id }}').on('keydown', function(e) {
             if(e.keyCode === 13 && !e.shiftKey) {
                 $('#commentForm{{ $post->id }}').submit()

@@ -14,7 +14,11 @@
                   </div> 
               </div>
                 <label> {{ $comment->content }} </label>
+                
           </div>
+                @if($comment->image)
+                <img src="{{ asset('images/'.$comment->image) }}" alt="comment image" style="margin-left: 50px; max-width:330px; max-height: 200px; border-radius: 25px">
+                @endif
           <div class="row" style="font-size: 13px">
             <div class="col text-start ms-4" >
               <label class="ms-4"> Like</label> <label class="ms-2"> Reply</label> 

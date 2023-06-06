@@ -7,12 +7,22 @@ use App\Models\Likes;
 use App\Models\Posts;
 use App\Models\Comments;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     //
     public function store(Request $request) {
-        $user = User::create($request->all());
+
+        $form = $request->validate([
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'password' => ['required', 'confirmed']
+        ]);
+        $form['password'] = bcrypt($form['password']);
+        $user = User::create($form);
         auth()->login($user);
         return redirect('/');
     }
@@ -56,6 +66,31 @@ class UserController extends Controller
 
         return view('users.show', ['user' => $user, 'posts' => $posts]);
     }
+
+    public function updateAccount(Request $request) {
+
+        $curr = $request->current_password;
+        $old = auth()->user()->password;
+
+        if (Hash::check($curr, $old)) {
+            $request->validate([
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'email' => ['required', 'email'],
+                'password' => ['required', 'confirmed']
+            ]);
+
+            $user = auth()->user();
+            $user->update($request->only('firstname', 'lastname', 'email', 'password'));
+            return back();
+            
+        }
+        else {
+            return back()->withErrors(['current_password' => 'Incorrect current passowrd']);
+        }
+        
+    }
+    
 
     public function updateProfilePic(Request $request) {
         $user = User::find(auth()->user()->id);

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('post_id');
             $table->text('content');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

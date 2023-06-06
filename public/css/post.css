@@ -1,0 +1,26 @@
+.post {
+    display: flex;
+    align-items: center;
+  }
+
+  .post-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  .border-top .col-4:hover {
+    background-color: rgb(238, 238, 238);
+  }
+  .border-top .col-4 {
+    border-radius: 10px;
+  }
+  .view-all-comments:hover a {
+    text-decoration: underline;
+  }
+  #view-comment:hover {
+    text-decoration: underline;
+  }
+  .card-body .post a:hover {
+    text-decoration: underline;
+  }

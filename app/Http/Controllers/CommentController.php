@@ -26,8 +26,10 @@ class CommentController extends Controller
         $comment->user_id = auth()->user()->id;
         $comment->post_id = $post->id;
         $comment->content = $request->content;
+        $comment->image = $request->image;
         $comment->save();
 
+        $comment->statistic = $post->comments;
         $commentOwner =  User::find(auth()->user()->id);
         $comment->commentOwner = $commentOwner;
         return response()->make(['success' => true, 'comment' => $comment]);

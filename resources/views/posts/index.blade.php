@@ -1,4 +1,5 @@
-    <div class="row justify-content-center">
+ <link rel="stylesheet" href="/css/post.css">
+ <div class="row justify-content-center">
         <div class="card shadow my-3" style="width: 35rem;">
             <div class="card-body">
                 @if (auth()->user()->profile_pic)
@@ -9,6 +10,8 @@
             </div>
         </div>
     </div>
+
+ 
 
     @foreach ($posts as $post)
     <div class="row justify-content-center">
@@ -28,7 +31,7 @@
                 <div class="modal-body">
                 <h6 class="card-title"> 
                         <img src="{{ empty(auth()->user()->profile_pic) ? asset('images/default.png') : asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar"> {{ auth()->user()->firstname . " " . auth()->user()->lastname }} </h6>
-                    <textarea name="post-content" class="border-0 mt-3" cols="57" rows="2" placeholder="Write a post..."></textarea>
+                    <textarea name="post-content" id="post-content" style="outline: none;" class="border-0 mt-3" cols="57" rows="2" placeholder="Write a post..."></textarea>
                     <div class="row">
                         <input type="file" name="post-img" class="form-control">
                     </div>
@@ -41,5 +44,21 @@
             </div>
         </div>
     </form>
+
+    <script>
+
+        $('#post-content').on('paste', function (event) {
+            var inputItem = (event.clipboardData || event.originalEvent.clipboardData).items;
+  
+    var item = inputItem[0];
+    
+    if (item.type.indexOf('image') !== -1) {
+      var file = item.getAsFile();
+      console.log(file)
+      // You can now handle the file data and perform actions, such as uploading or displaying the image
+    }
+});
+    
+    </script>
 
     

@@ -17,6 +17,14 @@ use App\Http\Controllers\CommentController;
 |
 */
 
+// RESOURCE ROUTES
+// index - show all
+// show - show single
+// create - show form to create new
+// store - store new
+// edit - show form to edit
+// update - update
+// destroy - destroy
 
 
 Route::get('/login', [UserController::class, 'login']);
@@ -27,6 +35,7 @@ Route::post('/login', [UserController::class, 'authenticate'])->name('login');
 Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/profile/{user_id}', [UserController::class, 'show']);
 Route::put('/profile/changeProfilePic', [UserController::class, 'updateProfilePic']);
+Route::put('/profile/updateAccount', [UserController::class, 'updateAccount']);
 Route::get('/settings', [UserController::class, 'settings']);
 
 Route::post('/posts/create', [PostController::class, 'store']);

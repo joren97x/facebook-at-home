@@ -36,7 +36,12 @@ class PostController extends Controller
         return view('index', ['posts' => $posts]);
     }
 
-    
+    public function destroy(Request $request) {
+        $post = Posts::findOrFail($request->post_id);
+        $post->delete();
+        return response()->make(['success' => true]);
+
+    }
 
     public function show($user_id) {
 

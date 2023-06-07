@@ -4,7 +4,7 @@
     
 <form method="POST" action="/register">
     @csrf
-    <div class="container mt-5">
+    <div class="container mt-5 justify-content-center d-flex">
         <div class="card" style="width: 18rem;">
             <div class="card-body">
               <h5 class="card-title text-center">Register</h5>

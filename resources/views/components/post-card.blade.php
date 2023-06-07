@@ -1,19 +1,30 @@
 @props(['post'])
 <link rel="stylesheet" href="/css/post.css">
-<div class="card my-3 shadow border" style="width: 35rem;">
+
+<script>
+    function deletePost(post_id) {
+        $('#delete_post_from_modal').val(post_id)
+    }
+   
+</script>
+
+<div class="card my-3 shadow border" style="width: 35rem;" id="post{{$post->id}}">
     <div class="card-body "> 
         {{-- POST OWNER AND DATE AND POST BODY --}}
-        <div class="post">
-            @if( empty($post->user->profile_pic) )
-                <a href="/profile/{{ $post->user->id }}"> <img src="{{ asset('images/default.png') }}" alt="Avatar" class="post-avatar"> </a>
-            @else
+        <div class="post"> 
                 <a href="/profile/{{ $post->user->id }}"> <img src="{{ asset('images/'.$post->user->profile_pic) }}" alt="Avatar" class="post-avatar"> </a>
-            @endif
                 <div class="post-author fw-medium "> 
                     <a href="/profile/{{ $post->user->id }}" id="post-owner"> {{ $post->user->firstname . ' ' . $post->user->lastname }} </a> • 
                     <span class="fw-light" style="font-size: 14px"> {{ $post->created_at->diffForHumans() }} </span> 
                     <span style="position: absolute; top: 25; right: 30; display: flex; align-items: center;">
-                        <label> <button class="btn"> <i class="bi bi-three-dots"></i> </button> </label>
+                        <label>
+                            <div class="dropstart">
+                                <button class="btn" data-bs-toggle="dropdown" aria-expanded="false"> <i class="bi bi-three-dots" ></i> </button>
+                                <ul class="dropdown-menu">
+                                  <li><button class="dropdown-item" onclick="editPost('{{$post->id}}', '{{ $post['post-content'] }}', '{{ $post['post-img'] }}')" type="button" data-bs-toggle="modal" data-bs-target="#edit_post_modal">Edit Post</button></li>
+                                  <li><button class="dropdown-item" onclick="deletePost({{$post->id}})"  type="button" data-bs-toggle="modal" data-bs-target="#delete_post_modal">Delete Post</button></li>
+                                </ul>
+                              </div>  </label>
                         <label> <button class="btn"> <i class="bi bi-x-lg"></i> </button> </label>
                       </span>
                 </div>
@@ -33,7 +44,7 @@
                 <span style="font-size: 15px" id="likesContainer{{ $post->id }}"> @if($post->likes > 0) {{ $post->likes == 1 ? $post->likes . " like" : $post->likes . " likes" }}  @endif  </span> 
             </div> 
             <div class="col-6 justify-content-end d-flex fw-light"> 
-                <a href="#" id="view-comment" class="view-all-comments-focus{{ $post->id }}"><span style="font-size: 15px" id="comment_stats"> @if($post->comments > 0) {{ $post->comments == 1 ? $post->comments . " comment" : $post->comments . " comments" }}  @endif </span> </a>
+                <a href="#" id="view-comment" class="view-all-comments-focus{{ $post->id }}"><span style="font-size: 15px" id="comment_stats{{ $post->id }}"> @if($post->comments > 0) {{ $post->comments == 1 ? $post->comments . " comment" : $post->comments . " comments" }}  @endif </span> </a>
             </div>
         </div>
         
@@ -81,7 +92,6 @@
                         url: "{{ route('post.like', ['post' => $post->id]) }}",
                         data: formData,
                         success: function(response) {
-                            console.log("WTF")
                             if (response.success) {
                                 var likesContainer = $('#likesContainer{{ $post->id }}');
                                 var likesCount = response.likes;
@@ -160,11 +170,7 @@
     <form method="POST" id="commentForm{{$post->id}}" style="scroll-behavior: smooth;" class="border-0 mt-2" action="/comment/{{ $post->id }}"> 
         @csrf
         <div class="post border-0">
-            @if(auth()->user()->profile_pic)
-                <img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar">
-            @else
-                <img src="{{ asset('images/default.png') }}" alt="Avatar" class="post-avatar">
-            @endif
+            <img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar">
             <div class="post-author fw-medium "> 
                 <div class="d-flex">
                     <textarea name="content" id="commentTextArea{{ $post->id }}" style="background: whitesmoke;" class="border-0 form-control" id="commentTextArea{{ $post->id }}" placeholder="Write a comment..." cols="65" rows="1"></textarea>
@@ -224,10 +230,9 @@
                             }
                     }
 
-                    $('#comment_stats').text(comment.statistic+" comments")
+                    $('#comment_stats{{ $post->id }}').text(comment.statistic+" comments")
 
                     var comContainer = $('.comment-container')
-                    console.log(comContainer)
 
                     var commentTime = new Date(props.created_at);
                     var currentTime = new Date();
@@ -245,52 +250,44 @@
                     }
 
                     var commentCard = `
-  <div class="row my-2">
-    <div class="col-11">
-      <div class="post border-0 row">
-        @if(empty($comment['commentOwner']['profile_pic']))
-        <div class="col-1 mb-3">
-          <a href="/profile/${props.commentOwner.id}">
-            <img src="{{ asset('images/default.png') }}" alt="Avatar" class="post-avatar">
-          </a>
-        </div>
-        @else
-        <div class="col-1 mb-3">
-          <a href="/profile/${props.commentOwner.id}">
-            <img src="{{ asset('images/' . $comment['commentOwner']['profile_pic']) }}" alt="Avatar" class="post-avatar">
-          </a>
-        </div>
-        @endif
-        <div class="post-author col ms-3" style="background-color: rgb(238, 238, 238); border-radius: 15px; display: inline-block;">
-          <div class="row fw-medium">
-            <div class="col">
-              <a href="/profile/${props.commentOwner.id}">${props.commentOwner.firstname} ${props.commentOwner.lastname}</a>
+    <div class="row my-2">
+        <div class="col-11">
+        <div class="post border-0 row">
+            <div class="col-1 mb-3">
+            <a href="/profile/${props.commentOwner.id}">
+                <img src="/images/${props.commentOwner.profile_pic}" alt="Avatar" class="post-avatar">
+            </a>
             </div>
-          </div>
-          <label>${props.content}</label>
+            <div class="post-author col ms-3" style="background-color: rgb(238, 238, 238); border-radius: 15px; display: inline-block;">
+            <div class="row fw-medium">
+                <div class="col">
+                <a href="/profile/${props.commentOwner.id}">${props.commentOwner.firstname} ${props.commentOwner.lastname}</a>
+                </div>
+            </div>
+            <label>${props.content}</label>
+            </div>
+            <div class="row" style="font-size: 13px">
+            <div class="col text-start ms-4">
+                <label class="ms-4">Like</label>
+                <label class="ms-2">Reply</label>
+                <label class="ms-2">${formattedTime}</label>
+            </div>
+            </div>
         </div>
-        <div class="row" style="font-size: 13px">
-          <div class="col text-start ms-4">
-            <label class="ms-4">Like</label>
-            <label class="ms-2">Reply</label>
-            <label class="ms-2">${formattedTime}</label>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>`;
-if(divCount == 0) {
-    $('.show-more-comments{{ $post->id }}').append(commentCard);
-    $('.show-more-comments{{ $post->id }}').css("display", "");
-}
-else {
+    </div>`;
+                if(divCount == 0) {
+                    $('.show-more-comments{{ $post->id }}').append(commentCard);
+                    $('.show-more-comments{{ $post->id }}').css("display", "");
+                }
+                else {
 
-    // var parent = document.querySelector('.show-more-comments{{ $post->id }}')
-    // var child = parent.getElementsByClassName("single-comment").length;
-    // console.log(child)
+                    // var parent = document.querySelector('.show-more-comments{{ $post->id }}')
+                    // var child = parent.getElementsByClassName("single-comment").length;
+                    // console.log(child)
 
-    $('#comment_container{{ $post->id }}').append(commentCard);
-}
+                    $('#comment_container{{ $post->id }}').append(commentCard);
+                }
 
                 },
                 error(error) {

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class LikeController extends Controller
 {
     //
-    public function like($post_id) {
+    public function store($post_id) {
         $post = Posts::find($post_id);
         $post->increment('likes');
         $like = new Likes();
@@ -19,7 +19,7 @@ class LikeController extends Controller
         return response()->json(['success' => true, 'likes' => $post->likes]);
     }
 
-    public function unlike($post_id) {
+    public function destroy($post_id) {
         $post = Posts::find($post_id);
         $post->decrement('likes');
         Likes::where('user_id', auth()->user()->id)->where('post_id', $post_id)->delete();

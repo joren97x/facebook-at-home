@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Comments;
+use App\Models\Likes;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comments>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Likes>
  */
-class CommentsFactory extends Factory
+class LikesFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -21,14 +21,13 @@ class CommentsFactory extends Factory
             //
             'user_id' => fake()->numberBetween(1, 10),
             'post_id' => fake()->numberBetween(1, 10),
-            'content' => fake()->sentence()
         ];
     }
 
     public function configure()
     {
-        return $this->afterCreating(function (Comments $comment) {
-            $comment->post()->increment('comments');
+        return $this->afterCreating(function (Likes $like) {
+            $like->post()->increment('likes');
         });
     }
 

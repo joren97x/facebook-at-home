@@ -20,9 +20,10 @@ class PostsFactory extends Factory
         $images = glob($imagePath . '/*.{jpg,png,gif}', GLOB_BRACE);
 
         return [
-            'user_id' => $this->faker->numberBetween(1, 5),
+            'user_id' => $this->faker->numberBetween(1, 10),
             'post-content' => $this->faker->sentence,
             'post-img' => $images ? str_replace($imagePath . '/', '', $this->faker->randomElement($images)) : null,
+
         ];
     }
     

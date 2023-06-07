@@ -2,11 +2,7 @@
 <div class="row my-2 single-comment">
   <div class="col-11" >
       <div class="post border-0 row ">
-          @if(empty($comment['commentOwner']['profile_pic']))
-            <div class="col-1 mb-3">  <a href="/profile/{{ $comment['commentOwner']['id'] }}"> <img src="{{ asset('images/default.png') }}" alt="Avatar" class="post-avatar"> </a> </div>
-          @else
             <div class="col-1 mb-3"> <a href="/profile/{{ $comment['commentOwner']['id'] }}"> <img src="{{ asset('images/'.$comment['commentOwner']['profile_pic']) }}" alt="Avatar" class="post-avatar"> </a> </div>
-          @endif
           <div class="post-author col ms-3" style="background-color: rgb(238, 238, 238); border-radius: 15px; display: inline-block;"> 
               <div class="row fw-medium">
                   <div class="col"> 

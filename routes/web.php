@@ -33,16 +33,17 @@ Route::get('/register', [UserController::class, 'register']);
 Route::post('/register', [UserController::class, 'store']);
 Route::post('/login', [UserController::class, 'authenticate'])->name('login');
 Route::post('/logout', [UserController::class, 'logout']);
-Route::get('/profile/{user_id}', [UserController::class, 'show']);
+Route::get('/profile/{user_id}', [UserController::class, 'show'])->middleware('auth');
 Route::put('/profile/changeProfilePic', [UserController::class, 'updateProfilePic']);
 Route::put('/profile/updateAccount', [UserController::class, 'updateAccount']);
-Route::get('/settings', [UserController::class, 'settings']);
+Route::get('/settings', [UserController::class, 'settings'])->middleware('auth');
 
-Route::post('/posts/create', [PostController::class, 'store']);
+Route::post('/posts/create', [PostController::class, 'store'])->middleware('auth');
 Route::get('/', [PostController::class, 'index'])->middleware('auth');
+Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.delete');
 
-Route::post('/like/{post}', [LikeController::class, 'like'])->name('post.like');
-Route::post('/unlike/{post}', [LikeController::class, 'unlike'])->name('post.unlike');
+Route::post('/like/{post}', [LikeController::class, 'store'])->name('post.like');
+Route::post('/unlike/{post}', [LikeController::class, 'destroy'])->name('post.unlike');
 Route::post('/comment/{post_id}', [CommentController::class, 'store'])->name('post.comment');
 
 Route::get('/test', function() {

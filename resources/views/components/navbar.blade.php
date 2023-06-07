@@ -9,7 +9,7 @@
         </div>
         <div class="col-2 justify-content-end d-flex">
 
-            <div class="dropdown">
+            {{-- <div class="dropdown">
                 <a class="btn rounded-circle" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-bell-fill h4"></i>
                 </a>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </ul>
-              </div>
+              </div> --}}
 
             <div class="dropdown">
                 <a class="btn" data-bs-toggle="dropdown" aria-expanded="false">

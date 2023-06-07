@@ -22,6 +22,7 @@ class UserController extends Controller
             'password' => ['required', 'confirmed']
         ]);
         $form['password'] = bcrypt($form['password']);
+        $form['profile_pic'] = "default_profile_pic.png";
         $user = User::create($form);
         auth()->login($user);
         return redirect('/');

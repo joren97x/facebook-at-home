@@ -15,4 +15,8 @@ class Comments extends Model
         'content'
     ];
 
+    public function post() {
+        return $this->belongsTo(Posts::class);
+    }
+
 }

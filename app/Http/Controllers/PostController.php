@@ -43,6 +43,12 @@ class PostController extends Controller
 
     }
 
+    public function update(Request $request) {
+        $post = Posts::findOrFail($request->post_id);
+        $post->update($request->only('post-content', 'post-img'));
+        return back();
+    }
+
     public function show($user_id) {
 
         $posts = Posts::where('user_id', $user_id)->get();

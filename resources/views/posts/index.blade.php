@@ -48,8 +48,9 @@
     </form>
 
     {{-- UPDATE POST MODAL --}}
-    <form method="POST" action="/posts/create">
+    <form method="POST" action="/posts/update">
         @csrf
+        @method('PUT')
         <div class="modal fade" id="edit_post_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
@@ -61,10 +62,14 @@
                 <h6 class="card-title"> 
                         <img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar"> {{ auth()->user()->firstname . " " . auth()->user()->lastname }} </h6>
                     <textarea name="post-content" id="edit_post_content" style="outline: none;" class="border-0 mt-3" cols="57" rows="2" placeholder="Write a post..."></textarea>
-                    <div class="row">
-                        <span> <img src="{{asset('images/me.png')}}" alt="post image" id="edit_post_image" style="max-height: 300px; max-width: 470px"> </span>
-                    </div>
-                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                    <div class="row justify-content-center d-flex">
+                        <div class="col-6 position-relative">
+                          <img src="{{ asset('images/me.png') }}" alt="post image" id="edit_post_image"  style="max-height: 250px; max-width: 250px">
+                          <input type="hidden" name="post-img" id="post-img" value="">
+                            <span> <button class="btn" onclick="delete_image(event)" >Delete Image</button> </span>
+                        </div>
+                      </div>
+                    <input type="hidden" name="post_id" id="post_id">
                 </div>
                 <div class="modal-footer">
                 <button type="submit" class="btn btn-primary form-control">Save</button>
@@ -92,17 +97,36 @@
       </div>
 
     <script>
+
+        function delete_image(event) {
+            event.preventDefault();
+            $('#edit_post_image').remove()
+            var div = $('.col-6'); 
+            var image = div.find('img'); 
+
+  if (image.length > 0) {
+    // Image element found within the div
+    // Perform any additional logic here
+    console.log('Image found!');
+  } else {
+    // Image element not found within the div
+    var inputFile = $('<input type="file" class="form-control" id="post_img" name="post-img">');
+    div.append(inputFile);
+  }
+        }
+
     function editPost(post_id, post_content, post_img) {
         console.log(post_content)
         $('#edit_post_content').val(post_content)
+        $('#post_id').val(post_id)
+        $('#post-img').val(post_img)
         $('#edit_post_image').attr('src', "{{ asset('images/') }}" + "/"+post_img)
-
     }
         $('#post-content').on('paste', function (event) {
             var inputItem = (event.clipboardData || event.originalEvent.clipboardData).items;
             var item = inputItem[0];
             if (item.type.indexOf('image') !== -1) {
-                var file = item.getAsFile();
+                var file = item.getAsFile();342
                 console.log(file)
             }
         });

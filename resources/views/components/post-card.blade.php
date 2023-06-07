@@ -25,7 +25,7 @@
                                   <li><button class="dropdown-item" onclick="deletePost({{$post->id}})"  type="button" data-bs-toggle="modal" data-bs-target="#delete_post_modal">Delete Post</button></li>
                                 </ul>
                               </div>  </label>
-                        <label> <button class="btn"> <i class="bi bi-x-lg"></i> </button> </label>
+                   
                       </span>
                 </div>
           </div>

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Home')
+@section('title', 'Facebook at home')
 
 @include('components.navbar')
 @section('content')

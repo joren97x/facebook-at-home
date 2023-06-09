@@ -18,6 +18,9 @@
         img {
             object-fit: cover;
         }
+        body {
+            background-color: rgb(242,242,242);
+        }
     </style>
 </head>
 <body>

@@ -71,13 +71,17 @@
              <button class="btn form-control" id="commentBtn{{ $post->id }}"> <i class="bi bi-chat-square"></i> <span style="font-size: 14px"> Comment</span> </button> 
         </div>
         <div class="col-4">
-            <button class="btn form-control" id="commentBtn{{ $post->id }}"> <i class="bi bi-share"></i> <span style="font-size: 14px"> Share</span> </button> 
+            <button class="btn form-control" id="shareBtn{{ $post->id }}"> <i class="bi bi-share"></i> <span style="font-size: 14px"> Share</span> </button> 
        </div>
     </div>
     
     {{-- KUNG NI LIKE OR UNLIKE --}}
         <script>
             $(document).ready(function() {
+
+                $('#shareBtn{{ $post->id }}').on('click', function() {
+
+                })
 
                 $('#commentBtn{{ $post->id }}').on('click', function () {
                     $('#commentTextArea{{ $post->id }}').focus()

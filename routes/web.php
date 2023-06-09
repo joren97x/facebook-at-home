@@ -5,6 +5,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,8 @@ Route::put('/posts/update', [PostController::class, 'update']);
 Route::post('/like/{post}', [LikeController::class, 'store'])->name('post.like');
 Route::post('/unlike/{post}', [LikeController::class, 'destroy'])->name('post.unlike');
 Route::post('/comment/{post_id}', [CommentController::class, 'store'])->name('post.comment');
+
+Route::get('search', [SearchController::class, 'search']);
 
 Route::get('/test', function() {
     return view('test');

@@ -1,40 +1,47 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="container-fluid bg-body-tertiary">
     @auth
     <div class="row">
-        <div class="col-9">
-            <a href="/">Index</a>
+        <div class="col-4">
+            <a href="/">facebook at home</a>
         </div>
-        <div class="col-1">
-            
+        <div class="col-4 justify-content-center d-flex my-2">
+            <div class="input-group" >
+                <span class="input-group-text rounded-start-pill bg-transparent border-end-0"><i
+                        class="bi bi-search"></i></span>
+                <input type="text" id="search-input" name="search" class="form-control rounded-end-pill border-start-0"
+                    placeholder="Search" style="outline: none; box-shadow: none">
+            </div>
         </div>
-        <div class="col-2 justify-content-end d-flex">
 
-            {{-- <div class="dropdown">
-                <a class="btn rounded-circle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-bell-fill h4"></i>
-                </a>
-              
-                <ul class="dropdown-menu" style="width: 400px">
-                    <div class="container w-100">
-                        <div class="row h4 ms-2">
-                            Notifications
-                        </div>
-                        <hr>
-                        <div class="row ms-2">
-                            <span><img src="{{ asset('images/default.png') }}" style="width: 50px; height: 40px" alt="Avatar" class="post-avatar"> 
-                            Somebody liked ur poost ahahk ahha</span>
-                        </div>
-                        <div class="row ms-2">
-                            <span><img src="{{ asset('images/default.png') }}" style="width: 50px; height: 40px" alt="Avatar" class="post-avatar"> 
-                            Somebody liked ur poost ahahk ahha</span>
-                        </div>
-                        <div class="row ms-2">
-                            <span><img src="{{ asset('images/default.png') }}" style="width: 50px; height: 40px" alt="Avatar" class="post-avatar"> 
-                            Somebody liked ur poost ahahk ahha</span>
-                        </div>
-                    </div>
-                </ul>
-              </div> --}}
+        {{-- SCRIPT FOR AUTO COMPLETE --}}
+        <script>
+
+            $(document).ready(function () {
+
+                $('#search-input').on('input', function () {
+                    console.log($('#search-input').val())
+                    var search_input =  $('#search-input').val()
+                    $.ajax({
+                        type: 'GET',
+                        url: "/search",
+                        data: {
+                            search_input: search_input,
+                        },
+                            success: (response) => {
+                            console.log(response)
+                        },
+                        error: (error) => {
+                            console.log(error)
+                        }
+                    })
+                })
+
+            })
+
+        </script>
+
+        <div class="col-4 justify-content-end d-flex">
 
             <div class="dropdown">
                 <a class="btn" data-bs-toggle="dropdown" aria-expanded="false">

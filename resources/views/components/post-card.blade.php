@@ -8,15 +8,16 @@
    
 </script>
 
-<div class="card my-3 shadow border" style="width: 35rem;" id="post{{$post->id}}">
+<div class="card my-2 shadow border" style="width: 35rem;" id="post{{$post->id}}">
     <div class="card-body "> 
         {{-- POST OWNER AND DATE AND POST BODY --}}
         <div class="post"> 
-                <a href="/profile/{{ $post->user->id }}"> <img src="{{ asset('images/'.$post->user->profile_pic) }}" alt="Avatar" class="post-avatar"> </a>
+                <a href="/profile/{{ $post->user->id }}"> <img src="{{ asset('images/'.$post->user->profile_pic) }}" alt="Avatar" class="post-avatar" id="post_profile_pic{{ $post->id }}"> </a>
                 <div class="post-author fw-medium "> 
-                    <a href="/profile/{{ $post->user->id }}" id="post-owner"> {{ $post->user->firstname . ' ' . $post->user->lastname }} </a> • 
+                    <a href="/profile/{{ $post->user->id }}" id="post-owner{{ $post->id }}"> {{ $post->user->firstname . ' ' . $post->user->lastname }} </a> • 
                     <span class="fw-light" style="font-size: 14px"> {{ $post->created_at->diffForHumans() }} </span> 
                     <span style="position: absolute; top: 25; right: 30; display: flex; align-items: center;">
+                        @if( auth()->user()->id == $post->user->id )
                         <label>
                             <div class="dropstart">
                                 <button class="btn" data-bs-toggle="dropdown" aria-expanded="false"> <i class="bi bi-three-dots" ></i> </button>
@@ -24,18 +25,33 @@
                                   <li><button class="dropdown-item" onclick="editPost('{{$post->id}}', '{{ $post['post-content'] }}', '{{ $post['post-img'] }}')" type="button" data-bs-toggle="modal" data-bs-target="#edit_post_modal">Edit Post</button></li>
                                   <li><button class="dropdown-item" onclick="deletePost({{$post->id}})"  type="button" data-bs-toggle="modal" data-bs-target="#delete_post_modal">Delete Post</button></li>
                                 </ul>
-                              </div>  </label>
-                   
+                              </div>  
+                        </label> 
+                        @endif
                       </span>
                 </div>
           </div>
-        <label class="card-text mt-2 ms-1"> {{ $post['post-content'] }} </label>
+        <label class="card-text mt-2 ms-1" id="post_content{{ $post->id }}"> {{ $post['post-content'] }} </label>
     
-   
+        @if($post->shared_from)
+
+          <div class="container border rounded">
+            {{-- <p> for extrace space from the top because i dont know how to design  --}}
+            <p></p>
+            <div class="post-author fw-medium "> 
+                <a href="/profile/{{ $post->sharedPostOwner->id }}"> <img src="{{ asset('images/'.$post->sharedPostOwner->profile_pic) }}" alt="Avatar" class="post-avatar" id="post_profile_pic{{ $post->sharedPostOwner->id }}"> </a>
+                <a href="/profile/{{ $post->sharedPostOwner->id }}" id="post-owner{{ $post->sharedPostOwner->id }}"> {{ $post->sharedPostOwner->firstname . ' ' . $post->sharedPostOwner->lastname }} </a> • 
+                <span class="fw-light" style="font-size: 14px"> {{ $post->sharedPost->created_at->diffForHumans() }} </span>  <br>
+                <label class="card-text mt-2 ms-1 fw-normal" id="post_content{{ $post->sharedPost->id }}"> {{ $post->sharedPost['post-content'] }} </label>
+                <img src="{{ asset('images/'. $post->sharedPost['post-img']) }}" id="post_image{{ $post->id }}" class="w-100" alt="" style="height: 400px; object-fit: cover;">
+            </div>
+        </div>
+
+        @endif
 
     {{-- CHECKS IF A POST HAS AN IMAGE --}}
     @if($post['post-img'])
-        <img src="{{ asset("images/".$post['post-img']) }}" class="card-img-top mt-2" style="height: 400px; object-fit: cover;" alt="image">
+        <img src="{{ asset("images/".$post['post-img']) }}" id="post_image{{ $post->id }}" class="card-img-top mt-2" style="height: 400px; object-fit: cover;" alt="image">
     @endif
 
         {{-- LIKES AND COMMENTS STATISITCS HAHHA --}}
@@ -70,17 +86,29 @@
         <div class="col-4">
              <button class="btn form-control" id="commentBtn{{ $post->id }}"> <i class="bi bi-chat-square"></i> <span style="font-size: 14px"> Comment</span> </button> 
         </div>
-        <div class="col-4">
-            <button class="btn form-control" id="shareBtn{{ $post->id }}"> <i class="bi bi-share"></i> <span style="font-size: 14px"> Share</span> </button> 
+        <div class="col-4" id="share_post_btn">
+            <button class="btn form-control" id="shareBtn{{ $post->id }}" data-bs-toggle="modal" data-bs-target="#sharePost"> <i class="bi bi-share"></i> <span style="font-size: 14px"> Share</span> </button> 
        </div>
     </div>
     
     {{-- KUNG NI LIKE OR UNLIKE --}}
         <script>
             $(document).ready(function() {
-
                 $('#shareBtn{{ $post->id }}').on('click', function() {
-
+                    var share_post_img = $('#post_image{{ $post->id }}').attr('src')
+                    var post_id = "{{ $post->id }}"
+                    console.log(post_id)
+                    if(share_post_img === undefined) {
+                        $('#share_post_img').hide()
+                    }
+                    else {
+                        $('#share_post_img').show()
+                    } 
+                    $('#share_post_id').val(post_id)
+                    $('#share_post_img').attr('src', share_post_img)
+                    $('#share_full_name').text($('#post-owner{{ $post->id }}').text())
+                    $('#share_post_content').text($('#post_content{{ $post->id }}').text())
+                    $('#share_post_profile_pic').attr('src', $('#post_profile_pic{{ $post->id }}').attr('src'))
                 })
 
                 $('#commentBtn{{ $post->id }}').on('click', function () {
@@ -178,11 +206,7 @@
             <div class="post-author fw-medium "> 
                 <div class="d-flex">
                     <textarea name="content" id="commentTextArea{{ $post->id }}" style="background: whitesmoke;" class="border-0 form-control" id="commentTextArea{{ $post->id }}" placeholder="Write a comment..." cols="65" rows="1"></textarea>
-                    <label for="fileInput" class="ml-auto">
-                      <button class="btn"> <i class="bi bi-camera-fill"></i> </button>
-                    </label>
                   </div>
-                  <input type="file" id="fileInput" style="display: none;">
             </div>
         </div>
     </form> 
@@ -233,9 +257,12 @@
                                 updated_at: commentOwner.updated_at
                             }
                     }
-
-                    $('#comment_stats{{ $post->id }}').text(comment.statistic+" comments")
-
+                    if(comment.statistic == 1) {
+                        $('#comment_stats{{ $post->id }}').text(comment.statistic+" comment")
+                    }
+                    else {
+                        $('#comment_stats{{ $post->id }}').text(comment.statistic+" comments")
+                    }
                     var comContainer = $('.comment-container')
 
                     var commentTime = new Date(props.created_at);

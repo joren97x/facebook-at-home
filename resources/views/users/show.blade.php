@@ -36,7 +36,9 @@
             <div class="row justify-content-center">
 
             @if($posts->isEmpty())
-                <h1>No posts found</h1>
+            <div class="card my-3 fs-1 text-center" style="width: 35rem;">
+              No posts found.
+            </div>
             @else
             
             @foreach($posts as $post)
@@ -81,7 +83,5 @@
           </div>
         </div>
       </div>
-      
-        
 
 @endsection

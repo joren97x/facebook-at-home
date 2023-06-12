@@ -31,7 +31,10 @@ class PostController extends Controller
 
             $post->isLiked = Likes::where('user_id', auth()->user()->id)
                 ->where('post_id', $post->id)->exists();
-
+            if($post->shared_from) {
+                $post->sharedPost = Posts::find($post->shared_from);
+                $post->sharedPostOwner = User::find($post->sharedPost['user_id']);
+            }
         }
         return view('index', ['posts' => $posts]);
     }
@@ -54,6 +57,11 @@ class PostController extends Controller
         $posts = Posts::where('user_id', $user_id)->get();
         return view('users.show', ['posts' => $posts]);
 
+    }
+
+    public function share(Request $request) {
+        Posts::create(['user_id' => $request->user_id, 'shared_from' => $request->shared_from, 'post-content' => $request->post_content]);
+        return redirect('/');
     }
 
 }

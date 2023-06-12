@@ -4,14 +4,13 @@
       <div class="post border-0 row ">
             <div class="col-1 mb-3"> <a href="/profile/{{ $comment['commentOwner']['id'] }}"> <img src="{{ asset('images/'.$comment['commentOwner']['profile_pic']) }}" alt="Avatar" class="post-avatar"> </a> </div>
           <div class="post-author col ms-3" style="background-color: rgb(238, 238, 238); border-radius: 15px; display: inline-block;"> 
-              <div class="row fw-medium">
-                  <div class="col"> 
-                      <a href="/profile/{{ $comment['commentOwner']['id'] }}"> {{ $comment['commentOwner']['firstname'] . " " . $comment['commentOwner']['lastname']}} </a> 
-                  </div> 
-              </div>
-                <label> {{ $comment->content }} </label>
-                
-          </div>
+                <div class="row fw-medium">
+                    <div class="col"> 
+                        <a href="/profile/{{ $comment['commentOwner']['id'] }}"> {{ $comment['commentOwner']['firstname'] . " " . $comment['commentOwner']['lastname']}} </a> 
+                    </div> 
+                </div>
+                  <label> {{ $comment->content }} </label>
+            </div>
                 @if($comment->image)
                 <img src="{{ asset('images/'.$comment->image) }}" alt="comment image" style="margin-left: 50px; max-width:330px; max-height: 200px; border-radius: 25px">
                 @endif

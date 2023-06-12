@@ -63,6 +63,10 @@ class UserController extends Controller
             }
             $post->isLiked = Likes::where('user_id', auth()->user()->id)
                 ->where('post_id', $post->id)->exists();
+            if($post->shared_from) {
+                $post->sharedPost = Posts::find($post->shared_from);
+                $post->sharedPostOwner = User::find($post->sharedPost['user_id']);
+            }    
         }
 
         return view('users.show', ['user' => $user, 'posts' => $posts]);
@@ -98,6 +102,11 @@ class UserController extends Controller
         $user->profile_pic = $request->profile_pic;
         $user->save();
         return back();
+    }
+
+    public function index() {
+        $user = User::all();
+        return $user;
     }
 
     public function settings() {

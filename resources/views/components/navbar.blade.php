@@ -1,16 +1,16 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<div class="container-fluid bg-body-tertiary">
+<div class="container-fluid bg-body-tertiary border shadow sticky-top">
     @auth
     <div class="row">
         <div class="col-4">
-            <a href="/">facebook at home</a>
+            <a href="/"> <img src=" {{ asset('/images/fblogo.png') }} " alt="" style="height: 50px; width: 130px"> </a>
         </div>
         <div class="col-4 justify-content-center d-flex my-2">
             <div class="input-group" >
-                <span class="input-group-text rounded-start-pill bg-transparent border-end-0"><i
-                        class="bi bi-search"></i></span>
+                <span class="input-group-text rounded-start-pill bg-transparent border-end-0" style="background-color: rgb(238, 238, 238);">
+                    <i class="bi bi-search" style=" color: gray"></i></span>
                 <input type="text" id="search-input" name="search" class="form-control rounded-end-pill border-start-0"
-                    placeholder="Search" style="outline: none; box-shadow: none">
+                    placeholder="Search" style="outline: none; box-shadow: none; background-color: rgb(238, 238, 238); color: gray">
             </div>
         </div>
 

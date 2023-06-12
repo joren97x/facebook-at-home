@@ -5,6 +5,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 
 /*
@@ -40,9 +41,10 @@ Route::put('/profile/updateAccount', [UserController::class, 'updateAccount']);
 Route::get('/settings', [UserController::class, 'settings'])->middleware('auth');
 
 Route::post('/posts/create', [PostController::class, 'store'])->middleware('auth');
-Route::get('/', [PostController::class, 'index'])->middleware('auth');
+Route::get('/', [HomeController::class, 'index'])->middleware('auth');
 Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.delete');
 Route::put('/posts/update', [PostController::class, 'update']);
+Route::post('/posts/share', [PostController::class, 'share']);
 
 Route::post('/like/{post}', [LikeController::class, 'store'])->name('post.like');
 Route::post('/unlike/{post}', [LikeController::class, 'destroy'])->name('post.unlike');

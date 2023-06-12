@@ -7,7 +7,7 @@
                                 <img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar"> 
                             </div>
                             <div class="col-11">
-                                <input type="button" style="background-color: rgb(238, 238, 238);"  data-bs-toggle="modal" data-bs-target="#createPost" class="form-control btn text-start rounded-pill" style="width: 500px" value="What's on your mind, {{ auth()->user()->firstname }}?... "> 
+                                <input type="button" style="background-color: rgb(238, 238, 238); color: gray"  data-bs-toggle="modal" data-bs-target="#createPost" class="form-control btn text-start rounded-pill" style="width: 500px" value="What's on your mind, {{ auth()->user()->firstname }}?... "> 
                             </div>
                     </div>
             </div>
@@ -96,7 +96,44 @@
         </div>
       </div>
 
+      {{-- SHARE POST MODAL --}}
+      <form method="POST" action="/posts/share">
+        @csrf
+        <div class="modal fade" id="sharePost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h1 class="fs-5" id="exampleModalLabel">Share Post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <h6 class="card-title"> 
+                        <img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar"> {{ auth()->user()->firstname . " " . auth()->user()->lastname }} </h6>
+                    <textarea name="post_content" id="post_content" style="outline: none;" class="border-0 mt-3" cols="57" rows="2" placeholder="Write a more banger caption <3"></textarea>
+                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                    
+                    <div class="container border">
+                        <br>
+                        <img src="" alt="Avatar" id="share_post_profile_pic" class="post-avatar"> <span id="share_full_name">  </span> </h6>
+                        <br>
+                        <input type="hidden" name="shared_from" id="share_post_id">
+                        <label class="m-1" id="share_post_content">  </label>
+                        <img src="" alt="" id="share_post_img" class="w-100" style="height: 250px">
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                <button type="submit" class="btn btn-primary form-control">Share</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </form>
+
     <script>
+
+
+
 
         function delete_image(event) {
             event.preventDefault();
@@ -133,6 +170,9 @@
     
 
         $(document).ready(function (){
+
+            
+
             $('#delete_post_from_modal').on('click', function () {
                 var post_id = $('#delete_post_from_modal').val()
                 var url = "{{ route('post.delete', ['post' => 'post_id']) }}"

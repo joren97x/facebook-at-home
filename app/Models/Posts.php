@@ -12,7 +12,8 @@ class Posts extends Model
     protected $fillable = [
         'post-content',
         'post-img',
-        'user_id'
+        'user_id',
+        'shared_from'
     ];
 
     public function likes() {

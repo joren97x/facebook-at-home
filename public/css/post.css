@@ -21,6 +21,10 @@
   #view-comment:hover {
     text-decoration: underline;
   }
+  .like:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
   .card-body .post a:hover {
     text-decoration: underline;
   }

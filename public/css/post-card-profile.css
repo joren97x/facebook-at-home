@@ -1,7 +1,7 @@
 .post {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
   }
 
   .post-avatar {

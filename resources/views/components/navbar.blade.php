@@ -6,11 +6,11 @@
             <a href="/"> <img src=" {{ asset('/images/fblogo.png') }} " alt="" style="height: 50px; width: 130px"> </a>
         </div>
         <div class="col-4 justify-content-center d-flex my-2">
-            <div class="input-group" >
-                <span class="input-group-text rounded-start-pill bg-transparent border-end-0" style="background-color: rgb(238, 238, 238);">
+            <div class="input-group">
+                <span class="input-group-text  rounded-start-pill  border-end-0" style="background-color: rgb(238, 238, 238);">
                     <i class="bi bi-search" style=" color: gray"></i></span>
-                <input type="text" id="search-input" name="search" class="form-control rounded-end-pill border-start-0"
-                    placeholder="Search" style="outline: none; box-shadow: none; background-color: rgb(238, 238, 238); color: gray">
+                <input type="text" id="search-input" name="search" class="border-0 rounded-end-pill border-start-0"
+                    placeholder="Search" style="outline: none; box-shadow: none; padding-right: 200px;background-color: rgb(238, 238, 238); color: gray">
             </div>
         </div>
 

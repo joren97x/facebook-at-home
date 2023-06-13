@@ -5,6 +5,30 @@
     function deletePost(post_id) {
         $('#delete_post_from_modal').val(post_id)
     }
+
+    function formatTime(created_at) {
+
+    var commentTime = new Date(created_at);
+    var currentTime = new Date();
+    var timeDiff = Math.floor((currentTime - commentTime) / 1000);
+
+    var formattedTime;
+    if (timeDiff < 60) {
+        formattedTime = timeDiff + 's';
+    } else if (timeDiff < 3600) {
+        formattedTime = Math.floor(timeDiff / 60) + 'm';
+    } else if (timeDiff < 86400) {
+        formattedTime = Math.floor(timeDiff / 3600) + 'h';
+    } else {
+        formattedTime = Math.floor(timeDiff / 86400) + 'd';
+    }
+    return formattedTime;
+    }
+    $(document).ready(function(){
+        var time = $('#time_span{{ $post->id }}').text()
+        var formattedTimeInPost = formatTime(time)
+        $('#time_span{{ $post->id }}').text(formattedTimeInPost)
+})
    
 </script>
 
@@ -14,8 +38,10 @@
         <div class="post"> 
                 <a href="/profile/{{ $post->user->id }}"> <img src="{{ asset('images/'.$post->user->profile_pic) }}" alt="Avatar" class="post-avatar" id="post_profile_pic{{ $post->id }}"> </a>
                 <div class="post-author fw-medium "> 
-                    <a href="/profile/{{ $post->user->id }}" id="post-owner{{ $post->id }}"> {{ $post->user->firstname . ' ' . $post->user->lastname }} </a> • 
-                    <span class="fw-light" style="font-size: 14px"> {{ $post->created_at->diffForHumans() }} </span> 
+                    <div class="row">
+                        <a href="/profile/{{ $post->user->id }}" id="post-owner{{ $post->id }}"> {{ $post->user->firstname . ' ' . $post->user->lastname }} </a> 
+                        <span class="fw-light" style="font-size: 12px"> <span  id="time_span{{ $post->id }}"> {{ $post->created_at }} </span> <span>• <i class="bi bi-globe-americas"></i> </span> </span>
+                    </div> 
                     <span style="position: absolute; top: 25; right: 30; display: flex; align-items: center;">
                         @if( auth()->user()->id == $post->user->id )
                         <label>
@@ -57,7 +83,10 @@
         {{-- LIKES AND COMMENTS STATISITCS HAHHA --}}
         <div class="row"> 
             <div class="col-6 fw-light">
-                <span style="font-size: 15px" id="likesContainer{{ $post->id }}"> @if($post->likes > 0) {{ $post->likes == 1 ? $post->likes . " like" : $post->likes . " likes" }}  @endif  </span> 
+                <span style="font-size: 15px" class="like" id="likesContainer{{ $post->id }}"> @if($post->likes > 0) {{ $post->likes == 1 ? $post->likes . " like" : $post->likes . " likes" }}  @endif  </span> 
+                <div class="like-tooltip{{ $post->id }}" id="like-tooltip{{ $post->id }}" style="position: absolute;">
+                    <ul class="like-list m-2 text-light" style="padding: 0"></ul>
+                  </div>
             </div> 
             <div class="col-6 justify-content-end d-flex fw-light"> 
                 <a href="#" id="view-comment" class="view-all-comments-focus{{ $post->id }}"><span style="font-size: 15px" id="comment_stats{{ $post->id }}"> @if($post->comments > 0) {{ $post->comments == 1 ? $post->comments . " comment" : $post->comments . " comments" }}  @endif </span> </a>
@@ -175,6 +204,39 @@
                         }
                     });
                 });
+
+                $('#likesContainer{{ $post->id }}').hover(function() {
+                        var $tooltip = $(this).next('#like-tooltip{{ $post->id }}');
+                        var postId = $(this).closest('.post').data('post-id');
+                        var post_id = "{{ $post->id }}"
+                        // Replace the following line with your logic to fetch the users who liked the post
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{ route('getLikes', ['post' => $post->id]) }}",
+                            success: function (response) {
+                                var likedUsers = ['John Doe', 'Joren Cute', 'Hamza Ahmed', 'Jeffrey Adonis'];
+                                $tooltip.find('.like-list').empty();
+                                response.usersWhoLiked.forEach((user) => {
+                                    $tooltip.find('.like-list').append('<li>' + user.firstname + " " + user.lastname + '</li>');
+                                    $('#like-tooltip{{ $post->id }}').css({'background-color': 'rgba(0,0,0,0.8)', 'border-radius': '10px'});
+                                });
+                               
+                            },
+                            error: function(error) {
+                                console.log(error);
+                            }
+
+                        })
+                        
+
+                        $tooltip.show();
+                    },
+                    function() {
+                    var $tooltip = $(this).next('#like-tooltip{{ $post->id }}');
+                    $tooltip.hide();
+                    }
+                );
+
             });
 
         </script>
@@ -265,20 +327,21 @@
                     }
                     var comContainer = $('.comment-container')
 
-                    var commentTime = new Date(props.created_at);
-                    var currentTime = new Date();
-                    var timeDiff = Math.floor((currentTime - commentTime) / 1000);
+                    var formattedTime = formatTime(props.created_at);
+                    // var commentTime = new Date(props.created_at);
+                    // var currentTime = new Date();
+                    // var timeDiff = Math.floor((currentTime - commentTime) / 1000);
 
-                    var formattedTime;
-                    if (timeDiff < 60) {
-                    formattedTime = timeDiff + 's';
-                    } else if (timeDiff < 3600) {
-                    formattedTime = Math.floor(timeDiff / 60) + 'm';
-                    } else if (timeDiff < 86400) {
-                    formattedTime = Math.floor(timeDiff / 3600) + 'h';
-                    } else {
-                    formattedTime = Math.floor(timeDiff / 86400) + 'd';
-                    }
+                    // var formattedTime;
+                    // if (timeDiff < 60) {
+                    // formattedTime = timeDiff + 's';
+                    // } else if (timeDiff < 3600) {
+                    // formattedTime = Math.floor(timeDiff / 60) + 'm';
+                    // } else if (timeDiff < 86400) {
+                    // formattedTime = Math.floor(timeDiff / 3600) + 'h';
+                    // } else {
+                    // formattedTime = Math.floor(timeDiff / 86400) + 'd';
+                    // }
 
                     var commentCard = `
     <div class="row my-2">
@@ -333,6 +396,9 @@
                 $('#commentForm{{ $post->id }}').submit()
             }
         })
+
+        
+
     })
 
 </script>

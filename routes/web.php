@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
+use App\Models\Likes;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +32,9 @@ use App\Http\Controllers\SearchController;
 
 Route::get('/login', [UserController::class, 'login']);
 Route::get('/register', [UserController::class, 'register']);
+Route::post('/login', [UserController::class, 'authenticate'])->name('login');
 
 Route::post('/register', [UserController::class, 'store']);
-Route::post('/login', [UserController::class, 'authenticate'])->name('login');
 Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/profile/{user_id}', [UserController::class, 'show'])->middleware('auth');
 Route::put('/profile/changeProfilePic', [UserController::class, 'updateProfilePic']);
@@ -41,14 +42,16 @@ Route::put('/profile/updateAccount', [UserController::class, 'updateAccount']);
 Route::get('/settings', [UserController::class, 'settings'])->middleware('auth');
 
 Route::post('/posts/create', [PostController::class, 'store'])->middleware('auth');
-Route::get('/', [HomeController::class, 'index'])->middleware('auth');
 Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.delete');
 Route::put('/posts/update', [PostController::class, 'update']);
 Route::post('/posts/share', [PostController::class, 'share']);
 
 Route::post('/like/{post}', [LikeController::class, 'store'])->name('post.like');
 Route::post('/unlike/{post}', [LikeController::class, 'destroy'])->name('post.unlike');
+Route::get('/getLikes/{post}', [LikeController::class, 'show'])->name('getLikes');
+
 Route::post('/comment/{post_id}', [CommentController::class, 'store'])->name('post.comment');
+Route::get('/', [HomeController::class, 'index'])->middleware('auth');
 
 Route::get('search', [SearchController::class, 'search']);
 

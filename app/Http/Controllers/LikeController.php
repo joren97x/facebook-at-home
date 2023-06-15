@@ -20,7 +20,8 @@ class LikeController extends Controller
     }
 
     public function show($post_id){
-        $usersWhoLiked = Likes::where('post_id', $post_id)->join('users', 'likes.user_id', '=', 'users.id')
+        $usersWhoLiked = Likes::where('post_id', $post_id)
+        ->join('users', 'likes.user_id', '=', 'users.id')
         ->select('likes.*', 'users.firstname', 'users.lastname')
         ->get();
         

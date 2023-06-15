@@ -1,10 +1,12 @@
  <link rel="stylesheet" href="/css/post.css">
+<script src="{{ asset('js/post-card.js') }}"></script>
+
  <div class="row justify-content-center">
         <div class="card shadow my-3" style="width: 35rem;">
             <div class="card-body">
                     <div class="row">
                             <div class="col-1">
-                                <img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar"> 
+                                <a href="profile/{{ auth()->user()->id }}"><img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar"> </a>
                             </div>
                             <div class="col-11">
                                 <input type="button" style="background-color: rgb(238, 238, 238); color: gray"  data-bs-toggle="modal" data-bs-target="#createPost" class="form-control btn text-start rounded-pill" style="width: 500px" value="What's on your mind, {{ auth()->user()->firstname }}?... "> 

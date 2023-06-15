@@ -39,6 +39,7 @@ Route::post('/logout', [UserController::class, 'logout']);
 Route::get('/profile/{user_id}', [UserController::class, 'show'])->middleware('auth');
 Route::put('/profile/changeProfilePic', [UserController::class, 'updateProfilePic']);
 Route::put('/profile/updateAccount', [UserController::class, 'updateAccount']);
+Route::put('/profile/updateBio', [UserController::class, 'updateBio']);
 Route::get('/settings', [UserController::class, 'settings'])->middleware('auth');
 
 Route::post('/posts/create', [PostController::class, 'store'])->middleware('auth');
@@ -54,6 +55,7 @@ Route::post('/comment/{post_id}', [CommentController::class, 'store'])->name('po
 Route::get('/', [HomeController::class, 'index'])->middleware('auth');
 
 Route::get('search', [SearchController::class, 'search']);
+Route::get('search-page', [SearchController::class, 'index'])->name('search.page');
 
 Route::get('/test', function() {
     return view('test');

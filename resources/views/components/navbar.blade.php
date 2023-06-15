@@ -1,45 +1,28 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="{{ asset('css/post.css') }}">
+<style>
+    #search-result:hover {
+        background-color: rgba(0,0,0,0.1)
+    }
+</style>
 <div class="container-fluid bg-body-tertiary border shadow sticky-top">
     @auth
     <div class="row">
         <div class="col-4">
             <a href="/"> <img src=" {{ asset('/images/fblogo.png') }} " alt="" style="height: 50px; width: 130px"> </a>
         </div>
+        
         <div class="col-4 justify-content-center d-flex my-2">
-            <div class="input-group">
-                <span class="input-group-text  rounded-start-pill  border-end-0" style="background-color: rgb(238, 238, 238);">
-                    <i class="bi bi-search" style=" color: gray"></i></span>
-                <input type="text" id="search-input" name="search" class="border-0 rounded-end-pill border-start-0"
-                    placeholder="Search" style="outline: none; box-shadow: none; padding-right: 200px;background-color: rgb(238, 238, 238); color: gray">
-            </div>
+            <form action="{{ route('search.page') }}" method="GET" class="border-0">
+                @csrf
+                <div class="input-group">
+                    <span class="input-group-text  rounded-start-pill  border-end-0" style="background-color: rgb(238, 238, 238);">
+                        <i class="bi bi-search" style=" color: gray"></i></span>
+                            <input type="text" id="search-input" name="search" class="border-0 rounded-end-pill border-start-0"
+                            placeholder="Search" style="outline: none; box-shadow: none; padding-right: 200px;background-color: rgb(238, 238, 238); color: gray">
+                </div>
+            </form>
         </div>
-
-        {{-- SCRIPT FOR AUTO COMPLETE --}}
-        <script>
-
-            $(document).ready(function () {
-
-                $('#search-input').on('input', function () {
-                    console.log($('#search-input').val())
-                    var search_input =  $('#search-input').val()
-                    $.ajax({
-                        type: 'GET',
-                        url: "/search",
-                        data: {
-                            search_input: search_input,
-                        },
-                            success: (response) => {
-                            console.log(response)
-                        },
-                        error: (error) => {
-                            console.log(error)
-                        }
-                    })
-                })
-
-            })
-
-        </script>
 
         <div class="col-4 justify-content-end d-flex">
 
@@ -63,21 +46,53 @@
                 </ul>
               </div>
         </div>
-        
-
-        
-    </div>
-    @else
-    <div class="row">
-        <div class="col-10">
-            Social Life 
-        </div>
-        <div class="col-1">
-            <a href="/login">Login</a>
-        </div>
-        <div class="col-1">
-            <a href="/register">Register</a>
-        </div>
     </div>
     @endauth
 </div>
+
+<div class="container bg-light border rounded" hidden id="search-bar-result" style="position: fixed; margin-left: 34%; width: 420px; z-index: 2;">
+    <h1>Search Result</h1>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#search-input').on('input', function() {
+            if($('#search-input').val() != '') {
+                $.ajax({
+                    type: 'GET',
+                    url: "/search",
+                    data: {
+                        search_input: $('#search-input').val(),
+                    },
+                    success: function (data) {
+                        $('#search-bar-result').removeAttr('hidden')
+                        var result = data.result.users;
+                        var container = $('#search-bar-result');
+                        container.empty(); // Clear previous results
+                        result.forEach(function(user) {
+                            var imgSrc = "images/"+ user.profile_pic
+                            var row = $('<div class="row fs-6 my-2" id="search-result"> <a href="/profile/'+ user.id +'"> <img src=" ' + imgSrc + ' " class="post-avatar"> ' + user.firstname + " " + user.lastname + '</a> </div>');
+                            container.append(row);
+                        });
+
+                        adjustContainerHeight(container); // Adjust container height
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+            $('#search-bar-result').attr('hidden', 'hidden')
+        });
+
+        function adjustContainerHeight(container) {
+            var rowHeight = 45; // Adjust this value based on your row's height
+            var numRows = container.children().length;
+            var newHeight = numRows * rowHeight;
+            container.height(newHeight);
+        }
+    });
+</script>
+
+    
+    

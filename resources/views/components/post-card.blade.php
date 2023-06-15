@@ -1,46 +1,22 @@
 @props(['post'])
-<link rel="stylesheet" href="/css/post.css">
+<link rel="stylesheet" href="{{ asset('css/post.css') }}">
+<script src="{{ asset('js/post-card.js') }}"></script>
 
 <script>
     function deletePost(post_id) {
         $('#delete_post_from_modal').val(post_id)
     }
-
-    function formatTime(created_at) {
-
-    var commentTime = new Date(created_at);
-    var currentTime = new Date();
-    var timeDiff = Math.floor((currentTime - commentTime) / 1000);
-
-    var formattedTime;
-    if (timeDiff < 60) {
-        formattedTime = timeDiff + 's';
-    } else if (timeDiff < 3600) {
-        formattedTime = Math.floor(timeDiff / 60) + 'm';
-    } else if (timeDiff < 86400) {
-        formattedTime = Math.floor(timeDiff / 3600) + 'h';
-    } else {
-        formattedTime = Math.floor(timeDiff / 86400) + 'd';
-    }
-    return formattedTime;
-    }
-    $(document).ready(function(){
-        var time = $('#time_span{{ $post->id }}').text()
-        var formattedTimeInPost = formatTime(time)
-        $('#time_span{{ $post->id }}').text(formattedTimeInPost)
-})
-   
 </script>
 
-<div class="card my-2 shadow border" style="width: 35rem;" id="post{{$post->id}}">
+<div class="row card my-2 shadow border" style="width: 35rem;" id="post{{$post->id}}">
     <div class="card-body "> 
         {{-- POST OWNER AND DATE AND POST BODY --}}
-        <div class="post"> 
+        <div class="post">
                 <a href="/profile/{{ $post->user->id }}"> <img src="{{ asset('images/'.$post->user->profile_pic) }}" alt="Avatar" class="post-avatar" id="post_profile_pic{{ $post->id }}"> </a>
                 <div class="post-author fw-medium "> 
                     <div class="row">
                         <a href="/profile/{{ $post->user->id }}" id="post-owner{{ $post->id }}"> {{ $post->user->firstname . ' ' . $post->user->lastname }} </a> 
-                        <span class="fw-light" style="font-size: 12px"> <span  id="time_span{{ $post->id }}"> {{ $post->created_at }} </span> <span>• <i class="bi bi-globe-americas"></i> </span> </span>
+                        <span class="fw-light" style="font-size: 12px"> <span  id="time_span{{ $post->id }}"> {{ $post->created_at->diffForHumans() }} </span> <span>• <i class="bi bi-globe-americas"></i> </span> </span>
                     </div> 
                     <span style="position: absolute; top: 25; right: 30; display: flex; align-items: center;">
                         @if( auth()->user()->id == $post->user->id )
@@ -48,20 +24,21 @@
                             <div class="dropstart">
                                 <button class="btn" data-bs-toggle="dropdown" aria-expanded="false"> <i class="bi bi-three-dots" ></i> </button>
                                 <ul class="dropdown-menu">
-                                  <li><button class="dropdown-item" onclick="editPost('{{$post->id}}', '{{ $post['post-content'] }}', '{{ $post['post-img'] }}')" type="button" data-bs-toggle="modal" data-bs-target="#edit_post_modal">Edit Post</button></li>
-                                  <li><button class="dropdown-item" onclick="deletePost({{$post->id}})"  type="button" data-bs-toggle="modal" data-bs-target="#delete_post_modal">Delete Post</button></li>
+                                    <li>    <button class="dropdown-item" onclick="editPost('{{$post->id}}', '{{ $post['post-content'] }}', '{{ $post['post-img'] }}')" type="button" data-bs-toggle="modal" data-bs-target="#edit_post_modal">Edit Post</button></li>
+                                    <li>    <button class="dropdown-item" onclick="deletePost({{$post->id}})"  type="button" data-bs-toggle="modal" data-bs-target="#delete_post_modal">Delete Post</button></li>
                                 </ul>
-                              </div>  
+                            </div>  
                         </label> 
                         @endif
-                      </span>
+                    </span>
                 </div>
-          </div>
+        </div>
+
         <label class="card-text mt-2 ms-1" id="post_content{{ $post->id }}"> {{ $post['post-content'] }} </label>
     
         @if($post->shared_from)
 
-          <div class="container border rounded">
+        <div class="container border rounded">
             {{-- <p> for extrace space from the top because i dont know how to design  --}}
             <p></p>
             <div class="post-author fw-medium "> 
@@ -85,8 +62,8 @@
             <div class="col-6 fw-light">
                 <span style="font-size: 15px" class="like" id="likesContainer{{ $post->id }}"> @if($post->likes > 0) {{ $post->likes == 1 ? $post->likes . " like" : $post->likes . " likes" }}  @endif  </span> 
                 <div class="like-tooltip{{ $post->id }}" id="like-tooltip{{ $post->id }}" style="position: absolute;">
-                    <ul class="like-list m-2 text-light" style="padding: 0"></ul>
-                  </div>
+                    <ul class="like-list m-2 text-light" style="padding: 0; font-size: 14px"></ul>
+                </div>
             </div> 
             <div class="col-6 justify-content-end d-flex fw-light"> 
                 <a href="#" id="view-comment" class="view-all-comments-focus{{ $post->id }}"><span style="font-size: 15px" id="comment_stats{{ $post->id }}"> @if($post->comments > 0) {{ $post->comments == 1 ? $post->comments . " comment" : $post->comments . " comments" }}  @endif </span> </a>
@@ -120,9 +97,9 @@
        </div>
     </div>
     
-    {{-- KUNG NI LIKE OR UNLIKE --}}
         <script>
             $(document).ready(function() {
+                // SHARE BUTTON STUFFS
                 $('#shareBtn{{ $post->id }}').on('click', function() {
                     var share_post_img = $('#post_image{{ $post->id }}').attr('src')
                     var post_id = "{{ $post->id }}"
@@ -143,7 +120,7 @@
                 $('#commentBtn{{ $post->id }}').on('click', function () {
                     $('#commentTextArea{{ $post->id }}').focus()
                 })
-
+                //  KUNG NI LIKE OR UNLIKE 
                 $(document).on('submit', '#likeForm{{ $post->id }}', function(e) {
                     e.preventDefault(); // Prevent the form from submitting traditionally
                     var formData = $(this).serialize();
@@ -204,7 +181,7 @@
                         }
                     });
                 });
-
+                //IF THE LIKES WHERE HOVERED THEN SHOW THE USERS WHO LIked sana all ge like
                 $('#likesContainer{{ $post->id }}').hover(function() {
                         var $tooltip = $(this).next('#like-tooltip{{ $post->id }}');
                         var postId = $(this).closest('.post').data('post-id');
@@ -227,8 +204,6 @@
                             }
 
                         })
-                        
-
                         $tooltip.show();
                     },
                     function() {
@@ -259,169 +234,162 @@
 </div>
 
 
- {{-- INPUT COMMMENT BOX --}}
- <div class="row">
-    <form method="POST" id="commentForm{{$post->id}}" style="scroll-behavior: smooth;" class="border-0 mt-2" action="/comment/{{ $post->id }}"> 
-        @csrf
-        <div class="post border-0">
-            <img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar">
-            <div class="post-author fw-medium "> 
-                <div class="d-flex">
-                    <textarea name="content" id="commentTextArea{{ $post->id }}" style="background: whitesmoke;" class="border-0 form-control" id="commentTextArea{{ $post->id }}" placeholder="Write a comment..." cols="65" rows="1"></textarea>
-                  </div>
-            </div>
-        </div>
-    </form> 
-</div>
-
-
-
-<script>
-
-    $(document).ready(function() {
-
-
-        var parentDiv = document.getElementById("comment_container{{ $post->id }}");
-        var divCount = parentDiv.getElementsByClassName("single-comment").length;
-
-        $('#commentForm{{ $post->id }}').on('submit', function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            var textarea = $(this).find('textarea');
-            textarea.val('');
-            textarea.blur();
-
-            $.ajax({
-                url: "{{ route('post.comment', ['post_id' => $post->id]) }}",
-                type: "POST",
-                data: formData,
-                success: function(response) {
-
-                    var comment = response.comment
-                    var commentOwner = response.comment.commentOwner
-
-                    var props= {
-                            id: comment.id,
-                            user_id: comment.user_id,
-                            post_id: comment.post_id,
-                            content: comment.content,
-                            created_at: comment.created_at,
-                            updated_at: comment.updated_at,
-                            commentOwner: {
-                                id: commentOwner.id,
-                                firstname: commentOwner.firstname,
-                                lastname: commentOwner.lastname,
-                                email: commentOwner.email,
-                                bio: commentOwner.bio,
-                                profile_pic: commentOwner.profile_pic,
-                                email_verified_at: commentOwner.email_verified_at,
-                                created_at: commentOwner.created_at,
-                                updated_at: commentOwner.updated_at
-                            }
-                    }
-                    if(comment.statistic == 1) {
-                        $('#comment_stats{{ $post->id }}').text(comment.statistic+" comment")
-                    }
-                    else {
-                        $('#comment_stats{{ $post->id }}').text(comment.statistic+" comments")
-                    }
-                    var comContainer = $('.comment-container')
-
-                    var formattedTime = formatTime(props.created_at);
-                    // var commentTime = new Date(props.created_at);
-                    // var currentTime = new Date();
-                    // var timeDiff = Math.floor((currentTime - commentTime) / 1000);
-
-                    // var formattedTime;
-                    // if (timeDiff < 60) {
-                    // formattedTime = timeDiff + 's';
-                    // } else if (timeDiff < 3600) {
-                    // formattedTime = Math.floor(timeDiff / 60) + 'm';
-                    // } else if (timeDiff < 86400) {
-                    // formattedTime = Math.floor(timeDiff / 3600) + 'h';
-                    // } else {
-                    // formattedTime = Math.floor(timeDiff / 86400) + 'd';
-                    // }
-
-                    var commentCard = `
-    <div class="row my-2">
-        <div class="col-11">
-        <div class="post border-0 row">
-            <div class="col-1 mb-3">
-            <a href="/profile/${props.commentOwner.id}">
-                <img src="/images/${props.commentOwner.profile_pic}" alt="Avatar" class="post-avatar">
-            </a>
-            </div>
-            <div class="post-author col ms-3" style="background-color: rgb(238, 238, 238); border-radius: 15px; display: inline-block;">
-            <div class="row fw-medium">
-                <div class="col">
-                <a href="/profile/${props.commentOwner.id}">${props.commentOwner.firstname} ${props.commentOwner.lastname}</a>
+    {{-- INPUT COMMMENT BOX --}}
+    <div class="row">
+        <form method="POST" id="commentForm{{$post->id}}" style="scroll-behavior: smooth;" class="border-0 mt-2" action="/comment/{{ $post->id }}"> 
+            @csrf
+            <div class="post border-0">
+                <a href="profile/{{ auth()->user()->id }}"> <img src="{{ asset('images/'.auth()->user()->profile_pic) }}" alt="Avatar" class="post-avatar"></a>
+                <div class="post-author fw-medium "> 
+                    <div class="d-flex">
+                        <textarea name="content" id="commentTextArea{{ $post->id }}" style="background: whitesmoke;" class="border-0 form-control" id="commentTextArea{{ $post->id }}" placeholder="Write a comment..." cols="65" rows="1"></textarea>
+                    </div>
                 </div>
             </div>
-            <label>${props.content}</label>
-            </div>
-            <div class="row" style="font-size: 13px">
-            <div class="col text-start ms-4">
-                <label class="ms-4">Like</label>
-                <label class="ms-2">Reply</label>
-                <label class="ms-2">${formattedTime}</label>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>`;
-                if(divCount == 0) {
-                    $('.show-more-comments{{ $post->id }}').append(commentCard);
-                    $('.show-more-comments{{ $post->id }}').css("display", "");
-                }
-                else {
+        </form> 
+    </div>
 
-                    // var parent = document.querySelector('.show-more-comments{{ $post->id }}')
-                    // var child = parent.getElementsByClassName("single-comment").length;
-                    // console.log(child)
 
-                    $('#comment_container{{ $post->id }}').append(commentCard);
-                }
 
-                },
-                error(error) {
-                    console.log(error)
+    <script>
+
+        $(document).ready(function() {
+
+
+            var parentDiv = document.getElementById("comment_container{{ $post->id }}");
+            var divCount = parentDiv.getElementsByClassName("single-comment").length;
+
+            $('#commentForm{{ $post->id }}').on('submit', function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                var textarea = $(this).find('textarea');
+                textarea.val('');
+                textarea.blur();
+
+                $.ajax({
+                    url: "{{ route('post.comment', ['post_id' => $post->id]) }}",
+                    type: "POST",
+                    data: formData,
+                    success: function(response) {
+
+                        var comment = response.comment
+                        var commentOwner = response.comment.commentOwner
+
+                        var props= {
+                                id: comment.id,
+                                user_id: comment.user_id,
+                                post_id: comment.post_id,
+                                content: comment.content,
+                                created_at: comment.created_at,
+                                updated_at: comment.updated_at,
+                                commentOwner: {
+                                    id: commentOwner.id,
+                                    firstname: commentOwner.firstname,
+                                    lastname: commentOwner.lastname,
+                                    email: commentOwner.email,
+                                    bio: commentOwner.bio,
+                                    profile_pic: commentOwner.profile_pic,
+                                    email_verified_at: commentOwner.email_verified_at,
+                                    created_at: commentOwner.created_at,
+                                    updated_at: commentOwner.updated_at
+                                }
+                        }
+                        if(comment.statistic == 1) {
+                            $('#comment_stats{{ $post->id }}').text(comment.statistic+" comment")
+                        }
+                        else {
+                            $('#comment_stats{{ $post->id }}').text(comment.statistic+" comments")
+                        }
+                        var comContainer = $('.comment-container')
+                        console.log(props.created_at)
+                        var commentTime = new Date(props.created_at);
+                        var currentTime = new Date();
+                        var timeDiff = Math.floor((currentTime - commentTime) / 1000);
+
+                        var formattedTime;
+                        if (timeDiff < 60) {
+                        formattedTime = timeDiff + 's';
+                        } else if (timeDiff < 3600) {
+                        formattedTime = Math.floor(timeDiff / 60) + 'm';
+                        } else if (timeDiff < 86400) {
+                        formattedTime = Math.floor(timeDiff / 3600) + 'h';
+                        } else {
+                        formattedTime = Math.floor(timeDiff / 86400) + 'd';
+                        }
+
+                        var commentCard = `
+                        <div class="row my-2">
+                            <div class="col-11">
+                            <div class="post border-0 row">
+                                <div class="col-1 mb-3">
+                                <a href="/profile/${props.commentOwner.id}">
+                                    <img src="/images/${props.commentOwner.profile_pic}" alt="Avatar" class="post-avatar">
+                                </a>
+                                </div>
+                                <div class="post-author col ms-3" style="background-color: rgb(238, 238, 238); border-radius: 15px; display: inline-block;">
+                                <div class="row fw-medium">
+                                    <div class="col">
+                                    <a href="/profile/${props.commentOwner.id}">${props.commentOwner.firstname} ${props.commentOwner.lastname}</a>
+                                    </div>
+                                </div>
+                                <label>${props.content}</label>
+                                </div>
+                                <div class="row" style="font-size: 13px">
+                                <div class="col text-start ms-4">
+                                    <label class="ms-4">Like</label>
+                                    <label class="ms-2">Reply</label>
+                                    <label class="ms-2">${formattedTime}</label>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>`;
+                    if(divCount == 0) {
+                        $('.show-more-comments{{ $post->id }}').append(commentCard);
+                        $('.show-more-comments{{ $post->id }}').css("display", "");
+                    }
+                    else {
+
+                        $('#comment_container{{ $post->id }}').append(commentCard);
+                    }
+
+                    },
+                    error(error) {
+                        console.log(error)
+                    }
+                })
+
+            })
+            // IF COMMENTS IN COMMENTBOX AND PRESSES ENTER KEY GO TO FUNCTION ABOVE TO SUBMIT FORM
+            $('#commentTextArea{{ $post->id }}').on('keydown', function(e) {
+                if(e.keyCode === 13 && !e.shiftKey) {
+                    $('#commentForm{{ $post->id }}').submit()
                 }
             })
 
         })
-        // IF COMMENTS IN COMMENTBOX AND PRESSES ENTER KEY GO TO FUNCTION ABOVE TO SUBMIT FORM
-        $('#commentTextArea{{ $post->id }}').on('keydown', function(e) {
-            if(e.keyCode === 13 && !e.shiftKey) {
-                $('#commentForm{{ $post->id }}').submit()
-            }
-        })
 
-        
-
-    })
-
-</script>
+    </script>
 
 {{-- SCRIPT WHEN CLICGGKING THE VIEW ALL COMMENT  --}}
-<script>
-    $(document).ready(function() {
-        $('.view-all-comments'+{{ $post->id }}).click(function(e) {
-            e.preventDefault();
-            $('.show-more-comments'+{{ $post->id }}).slideToggle();
-            $('.view-all-comments'+{{ $post->id }}).hide();
-        });
+    <script>
+        $(document).ready(function() {
+            $('.view-all-comments'+{{ $post->id }}).click(function(e) {
+                e.preventDefault();
+                $('.show-more-comments'+{{ $post->id }}).slideToggle();
+                $('.view-all-comments'+{{ $post->id }}).hide();
+            });
 
-        // SCRIPT WHEN CLICKING THE COMMENTS TEXT ABOVE THE COMMENT BUTTON 
-        $('.view-all-comments-focus'+{{ $post->id }}).click(function(e) {
-            e.preventDefault();
-            $('.show-more-comments'+{{ $post->id }}).slideToggle();
-            $('.view-all-comments'+{{ $post->id }}).hide();
-            var textarea = document.getElementById('commentTextArea'+{{ $post->id }});
-            textarea.focus();
+            // SCRIPT WHEN CLICKING THE COMMENTS TEXT ABOVE THE COMMENT BUTTON 
+            $('.view-all-comments-focus'+{{ $post->id }}).click(function(e) {
+                e.preventDefault();
+                $('.show-more-comments'+{{ $post->id }}).slideToggle();
+                $('.view-all-comments'+{{ $post->id }}).hide();
+                var textarea = document.getElementById('commentTextArea'+{{ $post->id }});
+                textarea.focus();
+            });
         });
-    });
-</script>
+    </script>
 
     </div>
 </div>

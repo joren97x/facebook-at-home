@@ -28,3 +28,8 @@
   .card-body .post a:hover {
     text-decoration: underline;
   }
+
+  #search-filters .row:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1); 
+  }

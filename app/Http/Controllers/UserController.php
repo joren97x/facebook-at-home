@@ -96,6 +96,12 @@ class UserController extends Controller
         
     }
     
+    public function updateBio(Request $request) {
+        $user = auth()->user();
+        $user->bio = $request->bio;
+        $user->save();
+        return back();
+    }
 
     public function updateProfilePic(Request $request) {
         $user = User::find(auth()->user()->id);

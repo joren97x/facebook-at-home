@@ -1,63 +1,106 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Facebook Post Box Clone | CodeWithNepal</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- FontAweome CDN Link for Icons -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+<head>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 <style>
-  .like-tooltip {
+  .search-container {
+  position: relative;
+  width: 300px;
+}
+
+#autocomplete-list {
   position: absolute;
-  display: none;
-  background: #f1f1f1;
-  padding: 5px;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
   border: 1px solid #ccc;
+  padding: 10px;
+  display: none;
 }
 
-.like-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+#autocomplete-list li {
+  padding: 5px;
+  cursor: pointer;
 }
 
-.like-list li {
-  margin-bottom: 5px;
+#autocomplete-list li:hover {
+  background-color: #f4f4f4;
 }
 
 </style>
+</head>
 <body>
-  <div class="post">
-    <button class="like-button">Like</button>
-    <div class="like-tooltip">
-      <ul class="like-list"></ul>
-    </div>
+  <div class="search-container">
+    <input type="text" id="search-input" placeholder="Search...">
+    <div id="autocomplete-list"></div>
   </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
-  $('.like-button').hover(
-    function() {
-      var $tooltip = $(this).next('.like-tooltip');
-      var postId = $(this).closest('.post').data('post-id');
-      // Replace the following line with your logic to fetch the users who liked the post
-      var likedUsers = ['User1', 'User2', 'User3'];
+  // Sample data for autocomplete
+  var data = [
+    "John Doe",
+    "Jane Smith",
+    "Mark Johnson",
+    "Emily Davis",
+    "Michael Wilson",
+    "Sarah Brown"
+  ];
 
-      $tooltip.find('.like-list').empty();
-      likedUsers.forEach(function(user) {
-        $tooltip.find('.like-list').append('<li>' + user + '</li>');
-      });
-
-      $tooltip.show();
-    },
-    function() {
-      var $tooltip = $(this).next('.like-tooltip');
-      $tooltip.hide();
+  // Function to perform autocomplete
+  function autocomplete(value) {
+    var matches = [];
+    for (var i = 0; i < data.length; i++) {
+      var regex = new RegExp(value, 'gi');
+      if (data[i].match(regex)) {
+        matches.push(data[i]);
+      }
     }
-  );
+    return matches;
+  }
+
+  // Function to display autocomplete results
+  function displayAutocomplete(matches) {
+    var autocompleteList = $('#autocomplete-list');
+    autocompleteList.empty();
+    if (matches.length > 0) {
+      for (var i = 0; i < matches.length; i++) {
+        autocompleteList.append('<li>' + matches[i] + '</li>');
+      }
+      autocompleteList.show();
+    } else {
+      autocompleteList.hide();
+    }
+  }
+
+  // Handle input event on search input
+  $('#search-input').on('input', function() {
+    var searchValue = $(this).val();
+    if (searchValue.length > 0) {
+      var matches = autocomplete(searchValue);
+      displayAutocomplete(matches);
+    } else {
+      $('#autocomplete-list').hide();
+    }
+  });
+
+  // Handle click event on autocomplete list item
+  $(document).on('click', '#autocomplete-list li', function() {
+    var selectedValue = $(this).text();
+    $('#search-input').val(selectedValue);
+    $('#autocomplete-list').hide();
+  });
+
+  // Hide autocomplete list on click outside the search container
+  $(document).on('click', function(e) {
+    if (!$(e.target).closest('.search-container').length) {
+      $('#autocomplete-list').hide();
+    }
+  });
 });
 
   </script>
-  </body>
+</body>
 </html>

@@ -46,16 +46,24 @@
                 <a href="/profile/{{ $post->sharedPostOwner->id }}" id="post-owner{{ $post->sharedPostOwner->id }}"> {{ $post->sharedPostOwner->firstname . ' ' . $post->sharedPostOwner->lastname }} </a> • 
                 <span class="fw-light" style="font-size: 14px"> {{ $post->sharedPost->created_at->diffForHumans() }} </span>  <br>
                 <label class="card-text mt-2 ms-1 fw-normal" id="post_content{{ $post->sharedPost->id }}"> {{ $post->sharedPost['post-content'] }} </label>
-                <img src="{{ asset('images/'. $post->sharedPost['post-img']) }}" id="post_image{{ $post->id }}" class="w-100" alt="" style="height: 400px; object-fit: cover;">
+                @if($post['post-img'])
+                    <input type="hidden" id="shared_post_image{{ $post->id }}" value=" {{ $post->sharedPost['post-img'] }} ">
+                    <img src="{{ asset('images/'. $post['post-img']) }}" id="post_image{{ $post->id }}" class="w-100" alt="image" style="height: 400px; object-fit: cover;">
+                @endif
             </div>
         </div>
 
         @endif
 
     {{-- CHECKS IF A POST HAS AN IMAGE --}}
-    @if($post['post-img'])
+    @if($post['post-img'] && !$post->shared_from)
+        <input type="hidden" id="shared_post_image{{ $post->id }}" value=" {{ $post['post-img'] }} ">
         <img src="{{ asset("images/".$post['post-img']) }}" id="post_image{{ $post->id }}" class="card-img-top mt-2" style="height: 400px; object-fit: cover;" alt="image">
     @endif
+
+    {{-- @if($post->shared_from && $post->sharedPost['post-img'])
+        <h1>HELLO GIATAY</h1>
+    @endif --}}
 
         {{-- LIKES AND COMMENTS STATISITCS HAHHA --}}
         <div class="row"> 
@@ -114,6 +122,7 @@
                     $('#share_post_img').attr('src', share_post_img)
                     $('#share_full_name').text($('#post-owner{{ $post->id }}').text())
                     $('#share_post_content').text($('#post_content{{ $post->id }}').text())
+                    $('#share_post_image').val($('#shared_post_image{{ $post->id }}').val())
                     $('#share_post_profile_pic').attr('src', $('#post_profile_pic{{ $post->id }}').attr('src'))
                 })
 

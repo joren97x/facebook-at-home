@@ -8,18 +8,18 @@
 <div class="container-fluid bg-body-tertiary border shadow sticky-top">
     @auth
     <div class="row">
-        <div class="col-4">
-            <a href="/"> <img src=" {{ asset('/images/fblogo.png') }} " alt="" style="height: 50px; width: 130px"> </a>
+        <div class="col-4" style="height: 50px">
+            <a href="/"> <img src=" {{ asset('/images/fblogo.png') }} " alt="" style="height: auto; width: 130px; position: absolute; bottom:-10px; object-fill: cover;"> </a>
         </div>
         
         <div class="col-4 justify-content-center d-flex my-2">
-            <form action="{{ route('search.page') }}" method="GET" class="border-0">
+            <form action="{{ route('search.page') }}" method="GET" style="margin: 0;">
                 @csrf
                 <div class="input-group">
                     <span class="input-group-text  rounded-start-pill  border-end-0" style="background-color: rgb(238, 238, 238);">
                         <i class="bi bi-search" style=" color: gray"></i></span>
-                            <input type="text" id="search-input" name="search" class="border-0 rounded-end-pill border-start-0"
-                            placeholder="Search" style="outline: none; box-shadow: none; padding-right: 200px;background-color: rgb(238, 238, 238); color: gray">
+                            <input type="text" id="search-input" name="search" class="rounded-end-pill border-start-0"
+                            placeholder="Search" style="outline: none; box-shadow: none; padding-right: 200px;border: 1px solid rgb(225,229,233); background-color: rgb(238, 238, 238); color: gray">
                 </div>
             </form>
         </div>
@@ -71,7 +71,7 @@
                         container.empty(); // Clear previous results
                         result.forEach(function(user) {
                             var imgSrc = "images/"+ user.profile_pic
-                            var row = $('<div class="row fs-6 my-2" id="search-result"> <a href="/profile/'+ user.id +'"> <img src=" ' + imgSrc + ' " class="post-avatar"> ' + user.firstname + " " + user.lastname + '</a> </div>');
+                            var row = $('<div class="row fs-6 my-2 rounded" id="search-result"> <a href="/profile/'+ user.id +'"> <img src=" ' + imgSrc + ' " class="post-avatar"> ' + user.firstname + " " + user.lastname + '</a> </div>');
                             container.append(row);
                         });
 

@@ -9,17 +9,17 @@
         <h1>BOANG</h1>
     @endforeach --}}
 
-        <div class="container-fluid">
+        <div class="container-fluid" >
             <div class="row">
                 <div class="col-4" id="search-filters" style="background-color: white;">
                     <h2>Search Results</h2>
                     <hr>
-                    Filters
-                    <div class="row my-2 ms-2 p-2 rounded" id="all-filter">All</div>
-                    <div class="row my-2 ms-2 p-2 rounded" id="users-filter">Users</div>
-                    <div class="row my-2 ms-2 p-2 rounded" id="posts-filter">Posts</div>
+                    <h4>Filters</h4>
+                    <div class="row my-2 p-2 rounded fs-5" id="all-filter"> <div class="col"> <i class="bi bi-stickies"></i> All </div></div>
+                    <div class="row my-2 p-2 rounded fs-5" id="users-filter"> <div class="col"> <i class="bi bi-people"></i> People </div> </div>
+                    <div class="row my-2 p-2 rounded fs-5" id="posts-filter"> <div class="col"> <i class="bi bi-sticky"></i> Posts </div> </div>
                 </div>
-                <div class="col-8 ">
+                <div class="col-8">
                     <div class="container" id="post-container">
 
                         @foreach($result->posts as $post)
@@ -34,18 +34,7 @@
 
                         @foreach($result->users as $user)
                             
-                            <div class="row justify-content-center d-flex" id="user-card">
-                                <div class="row card my-2 shadow border" style="width: 35rem;">
-                                    <div class="row my-2">
-                                        <div class="col-3">
-                                            <a href="/profile/{{ $user->id }}"> <img src="{{ asset('images/'.$user->profile_pic) }}" alt="Avatar" class="post-avatar" style="width: 80px; height: 80px"> </a>
-                                        </div>
-                                        <div class="col mt-4">
-                                            <a href="profile/{{ $user->id }}"> {{ $user->firstname .' '. $user->lastname }} </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <x-user-card-hover :user="$user" />
 
                         @endforeach
                     </div>

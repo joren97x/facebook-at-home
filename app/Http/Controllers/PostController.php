@@ -60,7 +60,7 @@ class PostController extends Controller
     }
 
     public function share(Request $request) {
-        Posts::create(['user_id' => $request->user_id, 'shared_from' => $request->shared_from, 'post-content' => $request->post_content]);
+        Posts::create(['user_id' => $request->user_id, 'shared_from' => $request->shared_from, 'post-content' => $request->post_content, 'post-img' => $request->share_post_image]);
         return redirect('/');
     }
 

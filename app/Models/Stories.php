@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Search extends Model
+class Stories extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'search_input'
+        'user_id',
+        'story_content'
     ];
 
 }

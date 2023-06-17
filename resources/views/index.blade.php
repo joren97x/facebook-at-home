@@ -21,7 +21,7 @@
     .container .sticky-left a {
         font-size: 15px
     }
-   
+
 </style>
 <div class=" ms-3 row ">
     <div class="container row col-3 fw-medium mt-4" style="height: 100vh; position: sticky; top: 0; left: 0; overflow-y:hidden;" onmouseover="this.style.overflowY = 'auto';" onmouseout="this.style.overflowY = 'hidden';">
@@ -144,7 +144,8 @@
            @include('posts.index')
         </div>
     
-        <div class="container row col-3 fw-medium mt-4 sticky-right" style="height: 100vh; position: sticky; top: 0; right: 0; overflow-y:hidden" onmouseover="this.style.overflowY = 'auto';" onmouseout="this.style.overflowY = 'hidden';"   >
+        <div class="container row col-3 fw-medium mt-4" style="height: 100vh; position: sticky; top: 0; right: 0; overflow-y:hidden" onmouseover="this.style.overflowY = 'auto';" onmouseout="this.style.overflowY = 'hidden';">
+
             <div class="col sticky-left">
                 <div class="row ms-1"> 
                     <h6>Sponsored</h6>

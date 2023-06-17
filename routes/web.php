@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\StoryController;
 use App\Models\Likes;
 
 /*
@@ -52,7 +53,12 @@ Route::post('/unlike/{post}', [LikeController::class, 'destroy'])->name('post.un
 Route::get('/getLikes/{post}', [LikeController::class, 'show'])->name('getLikes');
 
 Route::post('/comment/{post_id}', [CommentController::class, 'store'])->name('post.comment');
+
 Route::get('/', [HomeController::class, 'index'])->middleware('auth');
+
+Route::get('/story/create', [StoryController::class, 'index']);
+Route::post('/story/create', [StoryController::class, 'create']);
+Route::get('/story/show', [StoryController::class, 'show']);
 
 Route::get('search', [SearchController::class, 'search']);
 Route::get('search-page', [SearchController::class, 'index'])->name('search.page');

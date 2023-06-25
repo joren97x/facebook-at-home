@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Stories;
 use Illuminate\Http\Request;
 
@@ -19,8 +20,20 @@ class StoryController extends Controller
         return redirect('/');
     }    
 
-    public function show() {
-        return view('story.index');
+    public function show(Request $request) {
+
+        $story = Stories::find($request->id);
+        $story->user = User::find($story->user_id);
+
+        $stories = Stories::latest()->get();
+
+        foreach($stories as $str) {
+
+            $str->user = User::find($str->user_id);
+
+        }
+
+        return view('story.index', ['story' => $story, 'stories' => $stories]);
     }
 
 }

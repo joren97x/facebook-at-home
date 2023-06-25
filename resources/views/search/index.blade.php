@@ -11,7 +11,7 @@
 
         <div class="container-fluid" >
             <div class="row">
-                <div class="col-4" id="search-filters" style="background-color: white;">
+                <div class="col-4" id="search-filters" style="background-color: white; height: 90vh">
                     <h2>Search Results</h2>
                     <hr>
                     <h4>Filters</h4>
@@ -20,7 +20,17 @@
                     <div class="row my-2 p-2 rounded fs-5" id="posts-filter"> <div class="col"> <i class="bi bi-sticky"></i> Posts </div> </div>
                 </div>
                 <div class="col-8">
+
+
                     <div class="container" id="post-container">
+
+                        @if(count($result->posts) === 0) 
+                            <div class="row justify-content-center d-flex" id="post-card">
+                                <div class="row my-2" style="width: 35rem;">
+                                    <h1>NO POSTS FOUND.</h1>
+                                </div>
+                            </div>
+                        @endif
 
                         @foreach($result->posts as $post)
 
@@ -31,6 +41,14 @@
                         @endforeach
                     </div>
                     <div class="container" id="user-container">
+
+                        @if(count($result->users) === 0) 
+                            <div class="row justify-content-center d-flex" id="post-card">
+                                <div class="row my-2" style="width: 35rem;">
+                                    <h1>NO USERS FOUND.</h1>
+                                </div>
+                            </div>
+                        @endif
 
                         @foreach($result->users as $user)
                             

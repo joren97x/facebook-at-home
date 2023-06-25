@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Likes;
 use App\Models\Posts;
+use App\Models\Stories;
 use App\Models\Comments;
 use Illuminate\Http\Request;
 
@@ -14,6 +15,11 @@ class HomeController extends Controller
     public function index(){
         $users = User::all();
         $posts = Posts::latest()->get();
+        $stories = Stories::latest()->get();
+
+        foreach($stories as $story) {
+            $story->user = User::find($story->user_id);
+        }
 
         foreach($posts as $post) {
             $post->user = User::find($post->user_id);
@@ -32,6 +38,6 @@ class HomeController extends Controller
             }
         }
 
-        return view('index', compact('posts', 'users'));
+        return view('index', compact('posts', 'users', 'stories'));
     }
 }

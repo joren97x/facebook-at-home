@@ -41,7 +41,7 @@ Route::get('/profile/{user_id}', [UserController::class, 'show'])->middleware('a
 Route::put('/profile/changeProfilePic', [UserController::class, 'updateProfilePic']);
 Route::put('/profile/updateAccount', [UserController::class, 'updateAccount']);
 Route::put('/profile/updateBio', [UserController::class, 'updateBio']);
-Route::get('/settings', [UserController::class, 'settings'])->middleware('auth');
+Route::get('/settings/edit', [UserController::class, 'settings'])->middleware('auth');
 
 Route::post('/posts/create', [PostController::class, 'store'])->middleware('auth');
 Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.delete');
@@ -58,7 +58,7 @@ Route::get('/', [HomeController::class, 'index'])->middleware('auth');
 
 Route::get('/story/create', [StoryController::class, 'index']);
 Route::post('/story/create', [StoryController::class, 'create']);
-Route::get('/story/show', [StoryController::class, 'show']);
+Route::get('/story/show/{id}', [StoryController::class, 'show']);
 
 Route::get('search', [SearchController::class, 'search']);
 Route::get('search-page', [SearchController::class, 'index'])->name('search.page');

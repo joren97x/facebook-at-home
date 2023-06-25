@@ -36,7 +36,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="/profile/{{ auth()->user()->id }}">Profile</a></li>
-                  <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                  <li><a class="dropdown-item" href="/settings/edit">Settings</a></li>
                   <li>
                     <form method="POST" action="/logout">
                         @csrf

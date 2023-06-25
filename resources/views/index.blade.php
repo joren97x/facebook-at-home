@@ -143,6 +143,7 @@
         <div class="container col-6" >
            @include('posts.index')
         </div>
+
     
         <div class="container row col-3 fw-medium mt-4" style="height: 100vh; position: sticky; top: 0; right: 0; overflow-y:hidden" onmouseover="this.style.overflowY = 'auto';" onmouseout="this.style.overflowY = 'hidden';">
 

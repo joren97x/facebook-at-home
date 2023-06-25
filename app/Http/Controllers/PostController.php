@@ -7,6 +7,7 @@ use App\Models\Posts;
 use App\Models\Comments;
 use Illuminate\Http\Request;
 use App\Models\Likes;
+use App\Models\Stories;
 
 class PostController extends Controller
 {
@@ -19,6 +20,8 @@ class PostController extends Controller
     public function index() {
 
         $posts = Posts::latest()->get();
+        $stories = Stories::latest()->get();
+
 
         foreach($posts as $post) {
             $post->user = User::find($post->user_id);

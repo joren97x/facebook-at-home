@@ -2,47 +2,57 @@
 <script src="{{ asset('js/post-card.js') }}"></script>
 
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-3">
-            <a href="story/create">
-            <div class="card border card-story rounded shadow" style="width: 155px; height: 240px;">
-                <img src=" {{ asset('images/'.auth()->user()->profile_pic) }} " class=" rounded" style="height: 380px;">
-                <div class="card-body text-center" style="height: 40px">
-                    <i class="h2 bi bi-plus-circle text-light rounded-pill" style="background-color: rgb(13, 110, 253); position: absolute;border: 4px solid white; left: 60px; bottom: 12px"></i>
-                    <h6 class="card-title">Create Story</h6>
-                  </div>
+        
+        <div id="carouselExample" class="carousel slide">
+            <div class="carousel-inner">
+
+              <div class="carousel-item active">
+                <div class="row">
+                    <div class="col-3">
+                        <a href="story/create">
+                        <div class="card border card-story rounded shadow" style="width: 155px; height: 240px;">
+                            <img src=" {{ asset('images/'.auth()->user()->profile_pic) }} " class=" rounded" style="height: 380px;">
+                            <div class="card-body text-center" style="height: 40px">
+                                <i class="h2 bi bi-plus-circle text-light rounded-pill" style="background-color: rgb(13, 110, 253); position: absolute;border: 4px solid white; left: 60px; bottom: 12px"></i>
+                                <h6 class="card-title">Create Story</h6>
+                              </div>
+                          </div>
+                        </a>
+                    </div>
+                    @for($i = 0; $i < 3; $i++)
+                        <x-story-card :story="$stories[$i]" />
+                    @endfor
+                </div>
               </div>
-            </a>
-        </div>
-        <div class="col-3">
-            <a href="story/show">
-            <div class="card border card-story rounded shadow" style="width: 155px; height: 240px">
-                <img src="{{ asset('images/default_profile_pic.png') }}" class="post-avatar" alt="" style="position: absolute; top:10px; left: 10px; border: 2px solid rgb(22,106,218)">
-                <img src="{{ asset('images/me.png') }}" class="card-img-top h-100 rounded" alt="...">
-                <span style="position: absolute; bottom: 10; left:10; font-size: 14px" class="text-light fw-medium">John Ambassin Doe</span>
+
+              <div class="carousel-item ">
+                <div class="row">
+                    @for($i = 0; $i < 4; $i++)
+                        <x-story-card :story="$stories[$i]" />
+                    @endfor
+                </div>
+              </div>
+
+              <div class="carousel-item ">
+                <div class="row">
+                    @for($i = 0; $i < 4; $i++)
+                        <x-story-card :story="$stories[$i]" />
+                    @endfor
+                </div>
+              </div>
+
             </div>
-            </a>
-        </div>
-        <div class="col-3">
-            <a href="story/show">
-            <div class="card border card-story rounded shadow" style="width: 155px; height: 240px">
-                <img src="{{ asset('images/default_profile_pic.png') }}" class="post-avatar" alt="" style="position: absolute; top:10px; left: 10px; border: 2px solid rgb(22,106,218)">
-                <img src="{{ asset('images/bruh.png') }}" class="card-img-top h-100 rounded" alt="...">
-                <span style="position: absolute; bottom: 10; left:10; font-size: 14px" class="text-light fw-medium">Jane Ambatukam</span>
-            </div>
-            </a>
-        </div>
-        <div class="col-3">
-            <a href="story/show">
-            <div class="card border card-story rounded shadow" style="width: 155px; height: 240px">
-                <img src="{{ asset('images/default_profile_pic.png') }}" class="post-avatar" alt="" style="position: absolute; top:10px; left: 10px; border: 2px solid rgb(22,106,218)">
-                <img src="{{ asset('images/CUTE.jpg') }}" class="card-img-top h-100 rounded" alt="...">
-                <span style="position: absolute; bottom: 10; left:10; font-size: 14px" class="text-light fw-medium">Swag Drake</span>
-            </div>
-            </a>
-        </div>
-       
-    </div>
+            <button class="carousel-control-prev bg-danger rounded-pill" style="margin-top: 15%; left: 0; width: 40px; height: 40px;" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next bg-danger rounded-pill" style="margin-top: 15%; right: 0; width: 40px; height: 40px;" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+    
 </div>
 
  <div class="row justify-content-center">
@@ -223,7 +233,8 @@
                     url: url,
                     data: {
                         post_id: post_id,
-                        _token: '{{ csrf_token() }}'},
+                        _token: '{{ csrf_token() }}'
+                    },
                     success: function (response) {
                         $('#close_modal').click()
                         $('#post' + post_id).remove()

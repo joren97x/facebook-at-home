@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Likes;
 use App\Models\Posts;
+use App\Models\Stories;
 use App\Models\Comments;
 use Illuminate\Database\Seeder;
 
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         Comments::factory(15)->create();
         Likes::factory(20)->create();
+        Stories::factory(3)->create();
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

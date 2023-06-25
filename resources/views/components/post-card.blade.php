@@ -15,6 +15,20 @@
                 <a href="/profile/{{ $post->user->id }}"> <img src="{{ asset('images/'.$post->user->profile_pic) }}" alt="Avatar" class="post-avatar" id="post_profile_pic{{ $post->id }}"> </a>
                 <div class="post-author fw-medium "> 
                     <div class="row">
+                        {{-- SHOW PROFILE WHEN HOVERED BUT IDK --}}
+                        {{-- <div class="container bg-light" style="position: absolute; top: 0;">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-3">
+                                    <img src="{{ asset('images/'.$post->user->profile_pic) }}" alt="" class="post-avatar" style="height: 100px; width: 100px">
+                        
+                                    </div>
+                                    <div class="col">
+                                        {{ $post->user->firstname . ' ' . $post->user->lastname  }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div> --}}
                         <a href="/profile/{{ $post->user->id }}" id="post-owner{{ $post->id }}"> {{ $post->user->firstname . ' ' . $post->user->lastname }} </a> 
                         <span class="fw-light" style="font-size: 12px"> <span  id="time_span{{ $post->id }}"> {{ $post->created_at->diffForHumans() }} </span> <span>• <i class="bi bi-globe-americas"></i> </span> </span>
                     </div> 

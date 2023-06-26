@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Likes;
 use App\Models\Posts;
 use App\Models\Comments;
+use App\Models\RecentLogin;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +20,9 @@ class UserController extends Controller
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'firstname' => 'required',
             'lastname' => 'required',
-            'password' => ['required', 'confirmed']
+            'password' => ['required', 'confirmed'],
+            'gender' => 'required',
+            'birthday' => 'required'
         ]);
         $form['password'] = bcrypt($form['password']);
         $form['profile_pic'] = "default_profile_pic.png";
@@ -45,6 +48,7 @@ class UserController extends Controller
     }
 
     public function logout(Request $request) {
+        RecentLogin::create(['user_id' => auth()->user()->id]);
         auth()->logout();
         return redirect('/');
     }
@@ -122,7 +126,12 @@ class UserController extends Controller
     }
     
     public function login() {
-        return view('users.login');
+
+        $fersons = RecentLogin::all();
+        foreach($fersons as $ferson) {
+            $ferson->user = User::find($ferson->user_id);
+        }
+        return view('users.login', ['fersons' => $fersons]);
     }
 
     public function register() {

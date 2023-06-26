@@ -23,7 +23,7 @@ class StoriesFactory extends Factory
         return [
             //
 
-            'user_id' => fake()->numberBetween(0, 10),
+            'user_id' => fake()->numberBetween(1, 10),
             'story_content' => $images ? str_replace($imagePath."/", "", fake()->randomElement($images)) : null
 
         ];

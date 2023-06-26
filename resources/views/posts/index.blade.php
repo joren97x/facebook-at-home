@@ -27,7 +27,7 @@
 
               <div class="carousel-item ">
                 <div class="row">
-                    @for($i = 0; $i < 4; $i++)
+                    @for($i = 0; $i < 3; $i++)
                         <x-story-card :story="$stories[$i]" />
                     @endfor
                 </div>
@@ -35,7 +35,7 @@
 
               <div class="carousel-item ">
                 <div class="row">
-                    @for($i = 0; $i < 4; $i++)
+                    @for($i = 0; $i < 3; $i++)
                         <x-story-card :story="$stories[$i]" />
                     @endfor
                 </div>

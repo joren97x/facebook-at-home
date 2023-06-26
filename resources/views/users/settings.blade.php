@@ -10,6 +10,8 @@
      <h5>Firstname:</h5> {{ auth()->user()->firstname }}
      <h5>Lastname:</h5> {{ auth()->user()->lastname }}
      <h5>Email:</h5> {{ auth()->user()->email }}
+     <h5>Birthday</h5> {{ auth()->user()->birthday }}
+     <h5>Gender</h5>{{ auth()->user()->gender }}
      <br>
      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
  </div>

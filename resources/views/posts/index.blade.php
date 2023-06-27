@@ -19,12 +19,17 @@
                           </div>
                         </a>
                     </div>
+              @if(count($stories) !== 0)
+
                     @for($i = 0; $i < 3; $i++)
                         <x-story-card :story="$stories[$i]" />
                     @endfor
+              @endif
+
                 </div>
               </div>
 
+              @if(count($stories) !== 0)
               <div class="carousel-item ">
                 <div class="row">
                     @for($i = 0; $i < 3; $i++)
@@ -40,6 +45,7 @@
                     @endfor
                 </div>
               </div>
+              @endif
 
             </div>
             <button class="carousel-control-prev bg-danger rounded-pill" style="margin-top: 15%; left: 0; width: 40px; height: 40px;" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -50,7 +56,7 @@
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
-          </div>
+        </div>
 
     
 </div>

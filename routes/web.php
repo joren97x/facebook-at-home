@@ -5,6 +5,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FriendController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StoryController;
@@ -34,6 +35,9 @@ use App\Models\Likes;
 Route::get('/login', [UserController::class, 'login']);
 Route::get('/register', [UserController::class, 'register']);
 Route::post('/login', [UserController::class, 'authenticate'])->name('login');
+
+Route::post('/user/add-friend-request', [FriendController::class, 'store']);
+Route::post('/user/cancel-friend-request', [FriendController::class, 'destroy']);
 
 Route::post('/register', [UserController::class, 'store']);
 Route::post('/logout', [UserController::class, 'logout']);

@@ -30,3 +30,7 @@
   .file-input {
     display: none;
   }
+
+  .profile-info .profile-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
